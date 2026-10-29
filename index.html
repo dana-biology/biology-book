@@ -1,4 +1,17 @@
-<!doctype html>
+<style>
+  :root {
+    --primary-color: #1B4D3E;      /* أخضر داكن للعناوين والأزرار */
+    --secondary-color: #A3D9C9;    /* أخضر نعناعي فاتح */
+    --accent-color: #F4D03F;       /* أصفر ذهبي للعناصر التفاعلية */
+    --bg-color: #F9F9F6;           /* خلفية مريحة للعين */
+  }
+
+  body {
+    background-color: var(--bg-color) !important;
+    color: #2C3E50 !important;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+</style><!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
@@ -10,7 +23,13 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* Layout concept: one long field guide. A sticky chapter rail on top, each chapter opens with a title block, then a run of hands-on labs (SVG diagrams you click, sliders, crosses you run) and a short quiz. Each chapter carries its own accent: leaf green, sun amber, pea-flower violet. */
-:root{
+--bg: #F9F9F6;          /* لون الخلفية الجديد المريح للعين */
+  --hdr: #FFFFFF;         /* لون الشريط العلوي */
+  --surface: #FFFFFF;     /* لون البطاقات والمربعات */
+  --ink: #2C3E50;         /* لون النصوص الأساسية الواضحة */
+  --leaf: #1B4D3E;        /* الأخضر الزمردي الغامق للعناوين والأزرار */
+  --sun: #F4D03F;         /* أصفر ذهبي للعناصر التفاعلية */ 
+  :root{
   --bg:#f0f5ea; --hdr:#fbfdf8; --surface:#ffffff; --surface2:#e5eddb; --ink:#12241a; --muted:#46594d; --line:#ccd8c0;
   --leaf:#2b6a3b; --on-leaf:#ffffff; --sun:#935b05; --on-sun:#ffffff; --violet:#62369a; --on-violet:#ffffff;
   --leaffill:#bfe0a4; --pale:#e4e1c6; --wax:#c7a24b; --epi:#b9d8e4; --pal:#c6e6ac; --chl:#2f8f3f; --spo:#d9efc6;
