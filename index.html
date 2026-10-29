@@ -1,0 +1,1427 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>رحلة الأحياء</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout concept: one long field guide. A sticky chapter rail on top, each chapter opens with a title block, then a run of hands-on labs (SVG diagrams you click, sliders, crosses you run) and a short quiz. Each chapter carries its own accent: leaf green, sun amber, pea-flower violet. */
+:root{
+  --bg:#f0f5ea; --hdr:#fbfdf8; --surface:#ffffff; --surface2:#e5eddb; --ink:#12241a; --muted:#46594d; --line:#ccd8c0;
+  --leaf:#2b6a3b; --on-leaf:#ffffff; --sun:#935b05; --on-sun:#ffffff; --violet:#62369a; --on-violet:#ffffff;
+  --leaffill:#bfe0a4; --pale:#e4e1c6; --wax:#c7a24b; --epi:#b9d8e4; --pal:#c6e6ac; --chl:#2f8f3f; --spo:#d9efc6;
+  --xyl:#b8581a; --phl:#3a79b0; --gc:#8cc47a; --gap:#26382c; --soil:#d9cba9; --root:#8a5a2b;
+  --good:#1d7a39; --bad:#b3261e; --red:#c23b2e; --white:#f7f7f2; --pink:#ec9bb4; --pea-y:#e8b924; --pea-g:#69a83b; --water:#4b9bd3;
+  --c:var(--leaf); --on-c:var(--on-leaf);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1812; --hdr:#121f17; --surface:#16241b; --surface2:#1d2f23; --ink:#e6efe0; --muted:#a3b6a7; --line:#2c4234;
+    --leaf:#82c791; --on-leaf:#0b1a10; --sun:#e4b24d; --on-sun:#1a1204; --violet:#bb9ce8; --on-violet:#160d26;
+    --leaffill:#2f5a37; --pale:#4a4a38; --wax:#a88a3c; --epi:#3d6a7c; --pal:#2d5a33; --chl:#69c27c; --spo:#35603a;
+    --xyl:#e08a4a; --phl:#6aaee0; --gc:#4f8a46; --gap:#0a120d; --soil:#3d3426; --root:#c79a63;
+    --good:#6fd08a; --bad:#ff8a80; --red:#e0584a; --white:#eef0e6; --pink:#e58aa8; --water:#6bb4e6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1812; --hdr:#121f17; --surface:#16241b; --surface2:#1d2f23; --ink:#e6efe0; --muted:#a3b6a7; --line:#2c4234;
+  --leaf:#82c791; --on-leaf:#0b1a10; --sun:#e4b24d; --on-sun:#1a1204; --violet:#bb9ce8; --on-violet:#160d26;
+  --leaffill:#2f5a37; --pale:#4a4a38; --wax:#a88a3c; --epi:#3d6a7c; --pal:#2d5a33; --chl:#69c27c; --spo:#35603a;
+  --xyl:#e08a4a; --phl:#6aaee0; --gc:#4f8a46; --gap:#0a120d; --soil:#3d3426; --root:#c79a63;
+  --good:#6fd08a; --bad:#ff8a80; --red:#e0584a; --white:#eef0e6; --pink:#e58aa8; --water:#6bb4e6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;font-size:16px;line-height:1.8}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--hdr);z-index:40}
+.in{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:'Reem Kufi','IBM Plex Sans Arabic',sans-serif;font-weight:600;margin:0;text-wrap:balance;line-height:1.3}
+h1{font-size:clamp(44px,9vw,84px);font-weight:700;line-height:1.1}
+h2{font-size:clamp(30px,5vw,46px)}
+h3{font-size:22px;margin-bottom:6px}
+h4{font-size:18px;margin-bottom:4px}
+p{margin:0 0 12px}
+svg{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--hdr);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:8px 2px}
+.brand{font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:22px;text-decoration:none}
+.prog{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.prog-bar{display:block;width:90px;height:8px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.prog-bar i{display:block;height:100%;width:0;background:var(--leaf);transition:width .4s}
+.nav{display:flex;gap:6px;overflow-x:auto;padding-block:4px 8px;scrollbar-width:none}
+.nav a{white-space:nowrap;text-decoration:none;font-size:14px;padding:4px 12px;border-radius:99px;color:var(--muted)}
+.nav a:hover{background:var(--surface2);color:var(--ink)}
+
+/* hero */
+.hero{padding-block:44px 52px;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:32px;align-items:center}
+.eyebrow{font-size:13px;letter-spacing:.05em;font-weight:600;color:var(--c);margin:0 0 6px}
+.lead{max-width:62ch;font-size:18px;color:var(--muted)}
+.hero .eyebrow{color:var(--leaf)}
+.hero-art svg{width:100%;max-width:300px;margin-inline:auto}
+.paths{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;margin-top:24px}
+.path{display:block;text-decoration:none;border:1px solid var(--line);background:var(--surface);padding:14px 16px;border-radius:10px;border-top:5px solid var(--c);min-width:0}
+.path small{display:block;color:var(--c);font-weight:600;font-size:12.5px}
+.path b{font-family:'Reem Kufi',sans-serif;font-size:19px;font-weight:600;display:block;line-height:1.4}
+.path span{font-size:13.5px;color:var(--muted);line-height:1.5;display:block}
+.path:hover{background:var(--surface2)}
+.p1{--c:var(--leaf)}.p2{--c:var(--sun)}.p3{--c:var(--violet)}
+.lf{fill:var(--leaffill);stroke:var(--leaf);stroke-width:3;stroke-linejoin:round}
+.vn{fill:none;stroke:var(--leaf);stroke-width:2.5;stroke-linecap:round}
+
+.by{display:inline-block;margin:16px 0 0;padding:6px 16px;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-size:14.5px;color:var(--muted)}
+.by b{color:var(--ink);font-weight:600}
+.copy{margin:0 0 10px;font-weight:600;color:var(--ink)}
+/* book pages */
+#app{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.book{perspective:1800px;max-width:980px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-left,0px)) 8px max(16px,env(safe-area-inset-right,0px));overflow-x:clip}
+.page{display:flex;flex-direction:column;min-height:calc(100vh - 250px);background:color-mix(in srgb,var(--surface) 55%,var(--bg));border:1px solid var(--line);border-radius:14px 4px 4px 14px;box-shadow:inset -18px 0 22px -18px rgba(0,0,0,.32),-3px 3px 0 -1px var(--surface2),-6px 6px 0 -2px var(--line)}
+.page[hidden]{display:none}
+.pgin{flex:1;padding:30px 28px 12px;min-width:0}
+.pgin>.block:first-child{margin-top:0}
+.pgfoot{display:flex;justify-content:space-between;align-items:center;padding:10px 28px 14px;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);margin-inline:18px}
+.pgfoot b{font-family:'Reem Kufi',sans-serif;font-size:16px;color:var(--c)}
+.pgh{font-size:clamp(26px,4.6vw,38px);border-inline-start:8px solid var(--c);padding-inline-start:14px;margin-bottom:16px}
+.page.cover .pgin{padding:0}
+.page.cover .hero{border-bottom:0;padding-block:34px 28px}
+.page.opener .pgin{display:flex;flex-direction:column;justify-content:center;padding-block:48px}
+.page.opener .chap-head{margin-bottom:0}
+.page.opener .chap-head h2{font-size:clamp(36px,7vw,60px)}
+.page.fn{animation:turnN .55s ease both;transform-origin:right center}
+.page.fp{animation:turnP .45s ease both;transform-origin:right center}
+@keyframes turnN{from{transform:rotateY(70deg);opacity:.2}to{transform:none;opacity:1}}
+@keyframes turnP{from{transform:translateX(40px) rotateY(-14deg);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.page.fn,.page.fp{animation:none}}
+.bar{position:fixed;inset:auto 0 0 0;z-index:35;background:var(--hdr);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.barp{height:3px;background:var(--surface2)}
+.barp i{display:block;height:100%;width:0;background:var(--c);transition:width .3s}
+.barin{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:10px;padding:10px max(16px,env(safe-area-inset-left,0px)) 10px max(16px,env(safe-area-inset-right,0px))}
+.bb{border:0;background:var(--c);color:var(--on-c);padding:9px 18px;border-radius:10px;font-weight:600;cursor:pointer;font-size:15px;white-space:nowrap}
+.bb:disabled{opacity:.35;cursor:default}
+.bmid{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:14px}
+.bmid span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.bmid b{white-space:nowrap}
+.toc{position:fixed;inset:0;z-index:60;background:rgba(10,20,14,.55);display:flex;align-items:flex-end;justify-content:center}
+.toc[hidden]{display:none}
+.tocin{background:var(--surface);width:min(560px,100%);max-height:86vh;overflow-y:auto;border-radius:16px 16px 0 0;padding:18px max(16px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px))}
+.toch{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.tocin h4{color:var(--muted);font-size:14px;margin:16px 0 4px}
+.tocl{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:right;border:0;background:transparent;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:15.5px}
+.tocl:hover{background:var(--surface2)}
+.tocl[aria-current="true"]{background:var(--surface2);font-weight:600}
+@media (max-width:520px){.bmid span{display:none}.bb{padding:9px 14px}.pgin{padding:22px 16px 8px}.pgfoot{padding-inline:8px}}
+/* chapters */
+.chap{padding-block:60px;border-bottom:1px solid var(--line)}
+.ch-plants{--c:var(--leaf);--on-c:var(--on-leaf)}
+.ch-photo{--c:var(--sun);--on-c:var(--on-sun)}
+.ch-gen{--c:var(--violet);--on-c:var(--on-violet)}
+.chap-head{margin-bottom:30px;scroll-margin-top:110px}
+.chap-head h2{color:var(--ink);border-inline-start:8px solid var(--c);padding-inline-start:16px}
+.chap-head .lead{margin-top:12px}
+.goals{margin:14px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.goals li{font-size:14px;background:color-mix(in srgb,var(--c) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 30%,var(--line));padding:4px 12px;border-radius:99px}
+.block{margin-top:34px}
+.block>h3{margin-bottom:4px}
+.block>.sub{color:var(--muted);max-width:64ch;margin-bottom:16px}
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.grid2>*{min-width:0}
+.xp{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+.info{background:color-mix(in srgb,var(--c) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 25%,var(--line));border-radius:8px;padding:14px 16px;margin-top:12px;min-height:110px}
+.info p{margin:0;font-size:15.5px}
+.hint{font-size:14px;color:var(--muted);margin-bottom:12px}
+.note{font-size:13.5px;color:var(--muted);margin-top:10px}
+.callout{border-inline-start:5px solid var(--c);background:color-mix(in srgb,var(--c) 10%,var(--surface));padding:12px 16px;border-radius:6px;margin-block:14px;font-size:15.5px}
+.callout b{color:var(--c)}
+.chips,.tablist{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);padding:6px 14px;border-radius:99px;cursor:pointer;font-size:14.5px;display:inline-flex;align-items:center;gap:8px;line-height:1.5}
+.chip:hover{background:var(--surface2)}
+.chip[aria-pressed="true"],.chip[aria-selected="true"]{background:var(--c);color:var(--on-c);border-color:var(--c)}
+.tablist{margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:14px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+.btn{border:0;background:var(--c);color:var(--on-c);padding:8px 18px;border-radius:8px;cursor:pointer;font-weight:500;font-size:15px}
+.btn.alt{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sel-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:12px}
+select,input[type=range]{font:inherit;color:var(--ink)}
+select{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:5px 10px}
+input[type=range]{width:100%;accent-color:var(--c)}
+label.ck{display:flex;gap:8px;align-items:center;font-size:15px;cursor:pointer}
+.tbl{overflow-x:auto}
+table.t{border-collapse:collapse;width:100%;min-width:520px;font-size:15px}
+table.t th,table.t td{border:1px solid var(--line);padding:8px 12px;text-align:right;vertical-align:top}
+table.t th{background:color-mix(in srgb,var(--c) 14%,var(--surface));font-weight:600}
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.cards3>div{min-width:0;border:1px solid var(--line);background:var(--surface);padding:14px 16px;border-radius:8px}
+.cards3 h4{color:var(--c)}
+.cards3 p{font-size:15px;margin:0}
+.big{font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:34px;color:var(--c);line-height:1.1}
+.eq{direction:ltr;text-align:center;font-size:clamp(15px,3.6vw,22px);font-weight:500;padding:14px;background:color-mix(in srgb,var(--c) 10%,var(--surface));border-radius:8px;margin-block:12px;overflow-x:auto;white-space:nowrap}
+.status{font-weight:600;margin-top:10px;min-height:28px}
+
+/* svg classes */
+.svt{font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;fill:var(--ink)}
+.svt.s{font-size:12px;fill:var(--muted)}
+.lat{direction:ltr;unicode-bidi:isolate}
+.anat [data-p],.chl [data-p]{transition:opacity .2s;cursor:pointer}
+.sel [data-p]{opacity:.25}
+.sel [data-p].on{opacity:1}
+.a-wax{fill:var(--wax)}
+.a-epi{fill:var(--epi);stroke:color-mix(in srgb,var(--ink) 30%,transparent)}
+.a-pal{fill:var(--pal);stroke:color-mix(in srgb,var(--ink) 30%,transparent)}
+.a-chl{fill:var(--chl)}
+.a-spo{fill:var(--spo);stroke:color-mix(in srgb,var(--ink) 30%,transparent)}
+.a-sheath{fill:var(--surface2);stroke:color-mix(in srgb,var(--ink) 35%,transparent)}
+.a-xyl{fill:var(--xyl)}.a-phl{fill:var(--phl)}
+.a-gc{fill:var(--gc);stroke:color-mix(in srgb,var(--ink) 45%,transparent);stroke-width:1.5}
+.a-gap{fill:var(--gap)}
+.c-out{fill:color-mix(in srgb,var(--leaf) 30%,var(--surface));stroke:var(--leaf);stroke-width:4}
+.c-str{fill:color-mix(in srgb,var(--leaf) 12%,var(--surface));stroke:var(--leaf);stroke-width:2}
+.c-disc{fill:var(--chl);stroke:color-mix(in srgb,var(--ink) 40%,transparent)}
+.c-lam{stroke:var(--leaf);stroke-width:2;fill:none}
+.st-body{fill:color-mix(in srgb,var(--leaf) 14%,var(--surface))}
+.st-epi{stroke:var(--leaf);stroke-width:5}
+.bub{animation:rise 2.4s infinite ease-in}
+@keyframes rise{from{transform:translateY(0);opacity:1}to{transform:translateY(-26px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.bub{animation:none}html{scroll-behavior:auto}}
+
+/* punnett */
+table.pn{border-collapse:separate;border-spacing:4px;margin-inline:auto}
+table.pn th{font-weight:600;padding:4px 8px;font-size:15px;min-width:44px;text-align:center}
+table.pn td{background:color-mix(in srgb,var(--c) 11%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 25%,var(--line));border-radius:6px;text-align:center;padding:6px 8px;min-width:58px;font-size:14px;line-height:1.4}
+table.pn td b{display:block;font-size:15px}
+.dm,.rc{display:inline-block;width:11px;height:11px;border-radius:50%;margin-inline:4px}
+.dm{background:var(--c)}.rc{background:transparent;border:2px solid var(--c)}
+.ratio{font-weight:600;margin-top:10px}
+.peas{display:flex;flex-wrap:wrap;gap:6px}
+.pea{width:26px;height:26px;border-radius:50%}
+.sq{width:14px;height:14px;border-radius:3px;background:var(--c)}
+.sq.r{background:transparent;border:2px solid var(--c)}
+.sqs{display:flex;flex-wrap:wrap;gap:4px;max-width:260px}
+.bd{width:16px;height:16px;display:inline-block}
+.bd.f{border-radius:50%;background:var(--pink)}
+.bd.m{border-radius:3px;background:var(--phl)}
+.pbar{display:flex;gap:10px;align-items:center;margin:6px 0;font-size:14px}
+.pbar i{display:block;height:12px;border-radius:3px;background:var(--c)}
+.steps{display:flex;gap:8px;margin-bottom:14px}
+.steps button{width:44px;height:44px;border-radius:50%;border:2px solid var(--c);background:var(--surface);font-family:'Reem Kufi',sans-serif;font-size:19px;cursor:pointer}
+.steps button[aria-pressed="true"]{background:var(--c);color:var(--on-c)}
+.spec{height:14px;border-radius:7px;background:linear-gradient(to right,#7a1fd1 0%,#2a4be0 17%,#17a1d6 28%,#22b04a 42%,#d8d82a 58%,#f2a230 68%,#e03a2c 82%,#8a1111 100%)}
+
+/* quiz */
+.q{border-top:1px solid var(--line);padding-block:16px}
+.q:first-child{border-top:0}
+.qt{font-weight:600;margin-bottom:10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:right;border:1px solid var(--line);background:var(--surface);padding:9px 14px;border-radius:8px;cursor:pointer;line-height:1.6}
+.opt:hover:not(:disabled){background:var(--surface2)}
+.opt.ok{border-color:var(--good);background:color-mix(in srgb,var(--good) 16%,var(--surface))}
+.opt.no{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--surface))}
+.opt:disabled{cursor:default;color:var(--ink)}
+.why{font-size:14.5px;color:var(--muted);margin:10px 0 0}
+.qfoot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}
+.qscore{font-weight:600}
+
+/* flashcards */
+.fc{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:12px}
+.fcard{min-height:128px;text-align:right;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:6px;justify-content:center;min-width:0}
+.fcard b{font-family:'Reem Kufi',sans-serif;font-size:20px;font-weight:600}
+.fcard small{color:var(--muted);font-size:12.5px}
+.fcard span{font-size:14.5px;line-height:1.65}
+.fcard[aria-pressed="true"]{background:color-mix(in srgb,var(--leaf) 14%,var(--surface));border-color:var(--leaf)}
+.sumrow{display:grid;grid-template-columns:150px 1fr 70px;gap:12px;align-items:center;margin:8px 0;font-size:15px}
+.sumbar{height:12px;border-radius:99px;background:var(--surface2);overflow:hidden}
+.sumbar i{display:block;height:100%;background:var(--leaf);width:0;transition:width .4s}
+footer{padding-block:34px 60px;color:var(--muted);font-size:14px}
+
+@media (max-width:760px){
+  .xp,.hero-grid{grid-template-columns:minmax(0,1fr)}
+  .hero-art{order:-1}
+  .hero-art svg{max-width:170px}
+  .sumrow{grid-template-columns:1fr 60px}
+  .sumrow .sumbar{grid-column:1/-1;order:3}
+  .chap{padding-block:44px}
+  .prog-bar{width:56px}
+}
+</style>
+
+
+</head>
+<body>
+<div id="app" dir="rtl" lang="ar">
+
+<header class="top"><div class="in">
+  <div class="top-row">
+    <a class="brand" href="#top">رحلة الأحياء</a>
+    <div class="prog" aria-live="polite"><span id="progT">0 من 0</span><span class="prog-bar"><i id="progBar"></i></span></div>
+  </div>
+  <nav class="nav" aria-label="فصول الكتاب">
+    <a href="#plants">تركيب النباتات</a><a href="#photo">التغذية في النباتات</a><a href="#genetics">علم الوراثة</a><a href="#review">مراجعة</a>
+  </nav>
+</div></header>
+
+<section class="hero" id="top"><div class="in hero-grid">
+  <div>
+    <p class="eyebrow">كتاب الأحياء التفاعلي</p>
+    <h1>رحلة الأحياء</h1>
+    <p class="lead">افتح الورقة وشاهد ما في داخلها، وتتبّع الضوء داخل البلاستيدة الخضراء، ثم لقّح أجيالًا من البازلاء وراقب كيف تنتقل الصفات من جيل إلى جيل. في كل قسم نشاط تجرّبه بنفسك واختبار قصير يقيس ما فهمته.</p>
+    <p class="by">إعداد معلمة الأحياء: <b>دانه مبارك الحيص</b></p>
+    <div class="paths">
+      <a class="path p1" href="#plants"><small>الدرس 1-1</small><b>تركيب النباتات</b><span>الأوراق والسوق والجذور والأزهار</span></a>
+      <a class="path p2" href="#photo"><small>الدرس 2-1</small><b>التغذية في النباتات</b><span>البناء الضوئي خطوة بخطوة</span></a>
+      <a class="path p3" href="#genetics"><small>الوحدة الثانية</small><b>أساسيات علم الوراثة</b><span>مندل ومربع بانت والجينات</span></a>
+    </div>
+  </div>
+  <div class="hero-art"><svg id="heroLeaf" role="img" aria-label="ورقة نبات وعروقها"></svg></div>
+</div></section>
+
+<!-- ===================== الفصل الأول ===================== -->
+<section class="chap ch-plants" id="plants"><div class="in">
+  <div class="chap-head">
+    <p class="eyebrow">الدرس 1-1</p>
+    <h2>تركيب النباتات</h2>
+    <p class="lead">تغطي النباتات معظم قارات العالم بتنوع ضخم، ولها تكيفات فريدة تزيد من فرص بقائها حية. ومع ذلك تتشابه تراكيبها ووظائفها بشكل عام: أوراق وسوق وجذور وأزهار وبذور.</p>
+    <ul class="goals"><li>تحديد التراكيب الأساسية</li><li>مقارنة وظائف الأوراق والسوق والجذور والأزهار</li><li>المقارنة بين ذوات الفلقة الواحدة وذوات الفلقتين</li></ul>
+  </div>
+
+  <div class="tabgroup">
+    <div class="tablist" role="tablist">
+      <button class="chip" role="tab" data-t="leaves">الأوراق</button>
+      <button class="chip" role="tab" data-t="stems">السوق</button>
+      <button class="chip" role="tab" data-t="roots">الجذور</button>
+      <button class="chip" role="tab" data-t="flowers">الأزهار والبذور والثمار</button>
+    </div>
+
+    <!-- الأوراق -->
+    <div class="tabpanel" data-p="leaves">
+      <p class="lead">الأوراق أكثر التراكيب وضوحًا في النباتات. فيها تتم أكثر العمليات ضرورة لحياة النبات، وهي البناء الضوئي. الجزء الأكبر من الورقة مفلطح وعريض ويسمى النصل، ويتصل بالساق عن طريق عنق الورقة.</p>
+
+      <div class="block">
+        <h3>أنواع الأوراق وأشكالها</h3>
+        <p class="sub">الورقة البسيطة لها نصل واحد. أما المركّبة فلها نصلان أو أكثر صغيرا الحجم تسمى وريقات، وتربط جميعها بعنق واحد. اختر نوعًا لترى شكله.</p>
+        <div class="lab">
+          <div class="xp">
+            <div><div class="chips" id="leafChips"></div><div class="info" id="leafInfo" aria-live="polite"></div></div>
+            <svg id="leafSvg" viewBox="0 0 200 200" role="img" aria-label="رسم لنوع الورقة المختار" style="max-width:240px;margin-inline:auto"></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>داخل الورقة</h3>
+        <p class="sub">مقطع عرضي مبسّط في ورقة شجرة. اضغط على أي طبقة، أو اختر اسمها من القائمة، لتعرف وظيفتها.</p>
+        <div class="lab">
+          <div class="xp">
+            <svg id="anatSvg" class="anat" viewBox="0 0 640 350" role="img" aria-label="مقطع عرضي في ورقة نباتية"></svg>
+            <div><div class="chips" id="anatBtns"></div><div class="info" id="anatInfo" aria-live="polite"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3>الثغور: بوابات الورقة</h3>
+        <p class="sub">يتألف كل ثغر من خليتين حارستين. عندما يزداد ضغط الماء داخلهما تنتفخان وتبتعدان إحداهما عن الأخرى فينفتح الثغر. اسحب شريط الماء، أو غيّر ظروف الطقس.</p>
+        <div class="lab"><div class="xp">
+          <div>
+            <svg id="stSvg" viewBox="0 0 400 220" role="img" aria-label="ثغر وخليتان حارستان"></svg>
+            <p class="status" id="stState"></p>
+          </div>
+          <div>
+            <label for="stW" class="hint" style="display:block">كمية الماء في الخليتين الحارستين: <b id="stWv"></b></label>
+            <input type="range" id="stW" min="0" max="100" value="75">
+            <div style="display:grid;gap:8px;margin-top:14px">
+              <label class="ck"><input type="checkbox" id="fDay" checked> نهار وضوء معتدل</label>
+              <label class="ck"><input type="checkbox" id="fHot"> حرارة مرتفعة جدًا</label>
+              <label class="ck"><input type="checkbox" id="fBright"> ضوء شديد جدًا</label>
+              <label class="ck"><input type="checkbox" id="fWind"> رياح سريعة</label>
+              <label class="ck"><input type="checkbox" id="fDry"> طقس جاف</label>
+            </div>
+            <p class="note">نموذج مبسّط: كل ظرف قاسٍ يرفع تبخر الماء فيقلل الماء في الخليتين. وتحافظ النباتات بذلك على الماء داخلها.</p>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="block">
+        <h3>أوراق تكيّفت لبيئتها</h3>
+        <div class="cards3">
+          <div><h4>الصنوبر</h4><p>أوراقه الضيقة مغطاة بطبقة شمعية، وثغوره غائرة تحت سطح الورقة. يقلل هذا التركيب خسارة الماء.</p></div>
+          <div><h4>نبتة الجرّة</h4><p>أوراقها متحورة لجذب الحشرات وهضمها، فهي مصدر للنيتروجين.</p></div>
+          <div><h4>الصبّار</h4><p>أوراقه أشواك تحميه من آكلات الأعشاب، وأوراق بعض الأنواع سميكة تحفظ الماء داخلها في الظروف الحارة والجافة.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- السوق -->
+    <div class="tabpanel" data-p="stems">
+      <p class="lead">لا تعمل الأوراق بمفردها. تثبّتها السوق وتحمل الأزهار أيضًا، وتنقل الماء والمواد الغذائية إلى جميع أجزاء النبتة. وفي بعض النباتات تخزن السوق الغذاء الزائد، فلنبات البطاطا ساق تحت أرضية تخزن كميات كبيرة من النشا.</p>
+      <div class="block">
+        <h3>أربع فئات من النباتات</h3>
+        <p class="sub">تصنّف النباتات بحسب شكل الساق وحجمها ونوعها.</p>
+        <div class="lab"><div class="chips" id="stemChips"></div><div class="info" id="stemInfo" aria-live="polite"></div></div>
+      </div>
+      <div class="block">
+        <h3>مقطع عرضي في ساق</h3>
+        <p class="sub">يتكون الساق من ثلاثة أنواع من الأنسجة: البشرة والأنسجة الأساسية والأنسجة الوعائية. بدّل بين النوعين وقارن بين ترتيب الحزم الوعائية.</p>
+        <div class="lab"><div class="xp">
+          <div style="max-width:320px;margin-inline:auto;width:100%"><svg id="stemSvg" viewBox="0 0 320 260" role="img" aria-label="مقطع عرضي في ساق نبات"></svg></div>
+          <div><div class="chips" id="stemTog"></div><div class="info" id="stemTxt" aria-live="polite"></div>
+            <div class="row" style="margin-top:12px;font-size:14px"><span><i class="sw" style="background:var(--xyl)"></i> الخشب</span><span><i class="sw" style="background:var(--phl)"></i> اللحاء</span></div>
+          </div>
+        </div></div>
+      </div>
+      <div class="block">
+        <p class="callout"><b>سوق متحوّرة:</b> تخزن الدرنات والرايزومات والبصلات والكورمات الطعام خلال الأوقات الباردة أو الجافة. ومن أمثلتها درنة البطاطا، ورايزوم الزنجبيل، وبصلة أمارلس، وكورمة الدلبوث.</p>
+        <p class="callout"><b>العقد والعقلات:</b> ترتبط الأوراق بالساق عند مواضع تسمى العقد، وتسمى القطعة الواقعة بين عقدتين متجاورتين عقلة. ينمو النبات من براعم تتكون عادة عند العقد، وقد تنمو إلى أوراق أو فروع أو أزهار.</p>
+      </div>
+    </div>
+
+    <!-- الجذور -->
+    <div class="tabpanel" data-p="roots">
+      <p class="lead">الجذر هو الجزء من النبات الذي ينمو تحت سطح التربة. وظيفتاه الأساسيتان امتصاص الماء والعناصر المعدنية من التربة، وتثبيت النبات بقوة فيها. وتخزن بعض الجذور الغذاء الفائض كما في الجزر والبنجر.</p>
+      <div class="block">
+        <h3>نوعا الجذور</h3>
+        <div class="lab"><div class="xp">
+          <div style="max-width:300px;margin-inline:auto;width:100%"><svg id="rootSvg" viewBox="0 0 300 260" role="img" aria-label="رسم لنوع الجذر المختار"></svg></div>
+          <div><div class="chips" id="rootTog"></div><div class="info" id="rootTxt" aria-live="polite"></div></div>
+        </div></div>
+      </div>
+      <div class="block">
+        <h3>تركيب الجذر</h3>
+        <div class="cards3">
+          <div><h4>البشرة</h4><p>تحمي الجذر. تتحول بعض خلاياها في منطقة التمايز إلى شعيرات جذرية ماصة تزيد مساحة سطح الامتصاص بدرجة كبيرة.</p></div>
+          <div><h4>القشرة</h4><p>طبقة إسفنجية من النسيج الأساسي، تمتد بين البشرة والأسطوانة المركزية.</p></div>
+          <div><h4>الأسطوانة الوعائية</h4><p>تحيط بها البشرة الداخلية. يتوزع فيها اللحاء والخشب بشكل تبادلي.</p></div>
+          <div><h4>قلنسوة الجذر</h4><p>تغطي قمة الجذر التي تنقسم فيها الخلايا، وتحمي الخلايا الجديدة الهشة.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- الأزهار -->
+    <div class="tabpanel" data-p="flowers">
+      <p class="lead">الزهرة هي عضو التكاثر الجنسي في النبات الزهري. وظيفتها الأساسية إنتاج الأمشاج الذكرية في حبوب اللقاح والأمشاج المؤنثة (البيض)، وهي التركيب الذي تتم فيه عملية الإخصاب.</p>
+      <div class="block">
+        <h3>من الزهرة إلى الثمرة</h3>
+        <p class="sub">هذه خطوات متسلسلة فعلًا. اضغط على الأرقام بالترتيب.</p>
+        <div class="lab">
+          <div class="steps" id="flSteps"></div>
+          <div class="info" id="flInfo" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>اختبر نفسك</h3>
+    <div class="lab" id="quizPlants"></div>
+  </div>
+</div></section>
+
+<!-- ===================== الفصل الثاني ===================== -->
+<section class="chap ch-photo" id="photo"><div class="in">
+  <div class="chap-head">
+    <p class="eyebrow">الدرس 2-1</p>
+    <h2>التغذية في النباتات</h2>
+    <p class="lead">منذ نحو 3 مليارات سنة تطورت لدى بعض الكائنات القدرة على استخدام مصدر الطاقة اللامتناهي، وهو الشمس. تستخدم هذه الكائنات ضوء الشمس لتصنع الغذاء لنفسها ولغيرها من الكائنات، وتسمى عملية صنعه البناء الضوئي.</p>
+    <ul class="goals"><li>تحديد المواد والتراكيب المستخدمة</li><li>المقارنة بين خطوات البناء الضوئي</li><li>تفسير دور الضوء والماء وثاني أكسيد الكربون والكلوروفيل</li></ul>
+  </div>
+
+  <div class="block">
+    <h3>ماذا يحتاج البناء الضوئي؟</h3>
+    <p class="sub">شغّل أو أطفئ كل عنصر وراقب ما يحدث. لا تنتج الورقة السكر والأكسجين إلا عند توفر العناصر الأربعة معًا.</p>
+    <div class="lab">
+      <div class="chips" id="simChips" style="margin-bottom:12px"></div>
+      <svg id="simSvg" viewBox="0 0 600 340" role="img" aria-label="ورقة تستقبل الضوء والماء وثاني أكسيد الكربون"></svg>
+      <p class="status" id="simState" aria-live="polite"></p>
+      <div class="eq lat">6CO₂ + 6H₂O  →  C₆H₁₂O₆ + 6O₂</div>
+      <p class="note">تعمل الطاقة الضوئية والكلوروفيل على تحويل ثاني أكسيد الكربون والماء إلى جلوكوز وأكسجين. الرسم مبسّط ولا يبيّن كمية كل مادة.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>البلاستيدة الخضراء</h3>
+    <p class="sub">توجد في الخلايا النباتية عضيات تتخصص في البناء الضوئي. اضغط على أجزائها.</p>
+    <div class="lab"><div class="xp">
+      <svg id="chlSvg" class="chl" viewBox="0 0 560 300" role="img" aria-label="بلاستيدة خضراء"></svg>
+      <div><div class="chips" id="chlBtns"></div><div class="info" id="chlInfo" aria-live="polite"></div></div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <h3>مرحلتان لا مرحلة واحدة</h3>
+    <p class="sub">لا تتم عملية البناء الضوئي كلها دفعة واحدة. هي مرحلتان تحدث كل منهما في موضع مختلف داخل البلاستيدة.</p>
+    <div class="lab tbl"><table class="t">
+      <tr><th></th><th>التفاعلات الضوئية</th><th>دورة كالفن (التفاعلات غير المعتمدة على الضوء)</th></tr>
+      <tr><th>المكان</th><td>أغشية الثايلاكويد داخل الجرانا</td><td>الستروما (الحشوة)</td></tr>
+      <tr><th>تحتاج إلى</th><td>الضوء مباشرة. يمتصه الكلوروفيل والأصباغ الأخرى</td><td>لا تعتمد على وجود الضوء كي تحدث</td></tr>
+      <tr><th>المواد الداخلة</th><td>الماء والطاقة الضوئية</td><td>ثاني أكسيد الكربون وATP وNADPH</td></tr>
+      <tr><th>المواد الناتجة</th><td>الأكسجين وATP وNADPH</td><td>السكر (الجلوكوز)</td></tr>
+    </table></div>
+    <div class="cards3" style="margin-top:14px">
+      <div><span class="big">1</span><h4>الضوء يشطر الماء</h4><p>تنشطر جزيئات الماء إلى أيونات هيدروجين وإلكترونات وغاز الأكسجين. وينتقل الأكسجين إلى الهواء.</p></div>
+      <div><span class="big">2</span><h4>تخزين الطاقة</h4><p>تنتقل الإلكترونات عالية الطاقة عبر سلسلة نقل الإلكترون، فتتكون جزيئات ATP وNADPH.</p></div>
+      <div><span class="big">3</span><h4>بناء السكر</h4><p>تستخدم دورة كالفن طاقة ATP وNADPH لتثبيت CO₂. يلزم 6 جزيئات من CO₂ لتكوين جزيء جلوكوز واحد.</p></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>لماذا تبدو الأوراق خضراء؟</h3>
+    <p class="sub">حرّك المؤشر على أطوال موجية الطيف المرئي وشاهد كيف يمتص الكلوروفيل كل لون. المنحنيان مبسّطان ويتبعان شكل الرسم في الكتاب.</p>
+    <div class="lab" dir="ltr">
+      <div id="spChart"></div>
+      <div class="spec" style="margin-top:8px"></div>
+      <label for="spR" class="hint" style="display:block;margin-top:12px;direction:rtl">الطول الموجي: <b id="spV"></b></label>
+      <input type="range" id="spR" min="400" max="700" step="5" value="450">
+      <p class="status" id="spTxt" style="direction:rtl;text-align:right" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>العوامل المؤثرة في البناء الضوئي</h3>
+    <div class="cards3">
+      <div><h4>الضوء</h4><p>تحدث المرحلة الأولى فقط عند تعرض النبتة لضوء الشمس أو الضوء الصناعي. تتحمل نباتات الظل الضوء القليل، وتحتاج نباتات مثل قصب السكر إلى كميات كبيرة منه.</p></div>
+      <div><h4>الماء</h4><p>هو المركّب الأساسي لإكمال المرحلة الأولى. ويؤثر توفره أيضًا في إبقاء الخليتين الحارستين ممتلئتين ليظل الثغر مفتوحًا.</p></div>
+      <div><h4>ثاني أكسيد الكربون</h4><p>هو العامل الثالث المؤثر، ويستخدم لصنع السكريات البسيطة أثناء دورة كالفن.</p></div>
+    </div>
+    <p class="callout"><b>نقطة التعويض:</b> هي كمية الطاقة الضوئية المقتنصة أثناء البناء الضوئي اللازمة لبقاء النبات على قيد الحياة. عندها يتوازن السكر المنتَج مع السكر المستهلَك. وإذا قلّ الضوء عنها زمنًا طويلًا فقد النبات طاقة.</p>
+  </div>
+
+  <div class="block">
+    <h3>تجربة فان هلمونت (1630)</h3>
+    <p class="sub">زرع العالم البلجيكي شجرة صفصاف وزنها 2 كجم في برميل فيه 90 كجم تقريبًا من التربة، وسقاها بماء المطر خمس سنوات.</p>
+    <div class="lab">
+      <div class="chips" id="vhTog" style="margin-bottom:14px"></div>
+      <div id="vhView"></div>
+      <div class="info" id="vhInfo" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <p class="callout"><b>تجربة سنبيير (1782):</b> وضع العالم الفرنسي جان سنبيير أوراقًا في ماء يحتوي على ثاني أكسيد الكربون وعرّضها للشمس فأنتجت الأكسجين. ولم تنتجه الأوراق في ماء خالٍ منه. فاستنتج أن الأوراق تستخدم CO₂ في عملية تتطلب الضوء والماء أيضًا.</p>
+    <p class="callout"><b>البناء الكيميائي:</b> تعيش بعض أنواع البكتيريا قرب فوّهات البراكين في قاع المحيطات، وتحصل على غذائها بأكسدة كبريتيد الهيدروجين (H₂S). تنتج الكبريت (S) بدلًا من الأكسجين. وتتغذى على هذه البكتيريا ديدان أنبوبية كبيرة الحجم وكائنات أخرى. اكتُشف هذا النوع من البكتيريا عام 1977.</p>
+  </div>
+
+  <div class="block">
+    <h3>اختبر نفسك</h3>
+    <div class="lab" id="quizPhoto"></div>
+  </div>
+</div></section>
+
+<!-- ===================== الفصل الثالث ===================== -->
+<section class="chap ch-gen" id="genetics"><div class="in">
+  <div class="chap-head">
+    <p class="eyebrow">الوحدة الثانية</p>
+    <h2>أساسيات علم الوراثة</h2>
+    <p class="lead">كيف سيبدو طفلهما؟ هل سيشبه أنف أبيه أم أمه؟ يدرس علم الوراثة كيفية انتقال الخصائص البيولوجية من الآباء إلى الأبناء. اعتقد الناس قبل القرن العشرين أن الخصائص تنتقل بالدم. ونعلم الآن أنها تنتقل في رسائل كيميائية داخل الكروموسومات، مرمّزة على جزيئات DNA في النواة.</p>
+    <ul class="goals"><li>التمييز بين الصفات السائدة والمتنحية</li><li>تحليل تجارب مندل</li><li>التنبؤ بنتائج التزاوج</li><li>تفسير الارتباط والعبور</li></ul>
+  </div>
+
+  <div class="block">
+    <h3>تجارب مندل</h3>
+    <p class="sub">درس العالم النمساوي جريجور مندل (1822 - 1884م) سبع صفات في نبات البازلاء، واستخدم نحو 20,000 نبتة وحسب النتائج بالاحتمالات والإحصاء. اختار البازلاء لأن أزهارها خنثى تحيط بتلاتها بأعضائها التناسلية فتلقّح نفسها، ولأن لها أزواجًا من صفات متضادة سهلة التمييز، ولأن دورة حياتها قصيرة (نحو 3 أشهر).</p>
+    <div class="lab">
+      <div class="sel-row"><label for="trSel">اختر صفة:</label><select id="trSel"></select></div>
+      <div id="trShow" class="grid2"></div>
+      <div class="info"><p>قاطع مندل بين نبتتين نقيتين تختلفان في الصفة، فظهرت في الجيل الأول (F1) صفة واحدة فقط، وسماها <b>السائدة</b>. وعند تلقيح F1 ذاتيًا عادت الصفة الأخرى في الجيل الثاني (F2) وسماها <b>المتنحية</b>.</p></div>
+      <h4 style="margin-top:18px">جرّب الجيل الثاني بنفسك</h4>
+      <div class="row" style="margin:10px 0">
+        <button class="btn" id="sow64">ازرع 64 نبتة</button>
+        <button class="btn alt" id="sow20k">ازرع 20,000 نبتة</button>
+      </div>
+      <div class="sqs" id="sowGrid"></div>
+      <p class="ratio" id="sowTxt">اضغط لزراعة نباتات الجيل الثاني. النسبة المتوقعة 3 سائدة : 1 متنحية.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>قوانين مندل الثلاثة</h3>
+    <div class="cards3">
+      <div><span class="big">1</span><h4>الانعزال</h4><p>ينفصل كل زوج من الجينات عن بعضهما أثناء الانقسام الميوزي، فيحتوي نصف الأمشاج الناتجة على جين واحد من كل زوج.</p></div>
+      <div><span class="big">2</span><h4>التوزيع المستقل</h4><p>تنفصل أزواج الجينات بعضها عن بعض وتتوزع في الأمشاج عشوائيًا، فتنتقل كل صفة مستقلة عن الأخرى.</p></div>
+      <div><span class="big">3</span><h4>السيادة</h4><p>الأليل السائد يظهر تأثيره. أما الأليل المتنحي فيختفي في الفرد الهجين، ولا يظهر إلا إذا اجتمع أليلان متنحيان.</p></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>مختبر مربع بانت</h3>
+    <p class="sub">يعرض مربع بانت النتائج المتوقعة للتزاوج ولا يعرض النتائج الفعلية. اختر التركيب الجيني للأبوين وراقب النسب.</p>
+    <div class="lab">
+      <div class="tabgroup">
+        <div class="tablist" role="tablist">
+          <button class="chip" role="tab" data-t="mono">صفة واحدة (هجين أحادي)</button>
+          <button class="chip" role="tab" data-t="di">صفتان (هجين ثنائي)</button>
+        </div>
+        <div class="tabpanel" data-p="mono">
+          <div class="sel-row">
+            <label for="mT">الصفة</label><select id="mT"></select>
+            <label for="mA">الأب الأول</label><select id="mA"></select>
+            <label for="mB">الأب الثاني</label><select id="mB"></select>
+          </div>
+          <div class="chips" id="mPre" style="margin-bottom:12px"></div>
+          <div id="mOut"></div>
+        </div>
+        <div class="tabpanel" data-p="di">
+          <p class="hint">شكل البذور (R ملساء، r مجعّدة) ولونها (Y صفراء، y خضراء).</p>
+          <div class="sel-row">
+            <span>الأب الأول</span><select id="dA1" aria-label="شكل البذور للأب الأول"></select><select id="dA2" aria-label="لون البذور للأب الأول"></select>
+            <span>الأب الثاني</span><select id="dB1" aria-label="شكل البذور للأب الثاني"></select><select id="dB2" aria-label="لون البذور للأب الثاني"></select>
+          </div>
+          <div class="tbl"><div id="dOut"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>لعبة التلقيح الاختباري</h3>
+    <p class="sub">نبتة بذورها صفراء (Y?) قد تكون نقية YY أو هجينة Yy. للتمييز بينهما تُلقَّح مع نبتة متنحية نقية بذورها خضراء (yy). نبتتنا هذه مجهولة.</p>
+    <div class="lab">
+      <div class="row"><button class="btn" id="tcGo">لقّح مع yy وانظر الأبناء</button><button class="btn alt" id="tcNew">نبتة مجهولة جديدة</button></div>
+      <div class="peas" id="tcPeas" style="margin-block:14px;min-height:30px"></div>
+      <div class="row" id="tcGuess" hidden><span>ما تركيب النبتة المجهولة؟</span><button class="chip" data-g="YY">YY (نقية)</button><button class="chip" data-g="Yy">Yy (هجينة)</button></div>
+      <p class="status" id="tcRes" aria-live="polite"></p>
+      <div class="grid2" style="margin-top:12px">
+        <div class="info"><p><b>إذا كانت YY:</b> جميع الأبناء Yy، فتكون كلها صفراء.</p></div>
+        <div class="info"><p><b>إذا كانت Yy:</b> نصف الأبناء Yy أصفر ونصفهم yy أخضر.</p></div>
+      </div>
+      <p class="note">كلما زاد عدد الأبناء زادت ثقتك في الاستنتاج. قد يظهر أبناء صفر كلهم صدفة من نبتة هجينة، لكن احتمال ذلك صغير.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>ليست كل الصفات تتبع السيادة التامة</h3>
+    <p class="sub">انظر ماذا يحدث للأليل الآخر في الفرد الهجين. التلقيح واحد (RR × WW) لكن النتيجة تتغير بحسب نمط السيادة.</p>
+    <div class="lab">
+      <div class="chips" id="dmTog" style="margin-bottom:14px"></div>
+      <div id="dmOut"></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <p class="callout"><b>شروط تحقق النسب المندلية:</b> أن يكون الأبوان المراد تزاوجهما من سلالة نقية؛ وأن يوجد تباين بين الصفات الوراثية التي تتم دراستها؛ وأن تكون الكائنات المختارة سريعة النمو وسهلة التربية وذات إنتاج كبير، ليمكن تفسير نتائج تزاوجاتها إحصائيًا.</p>
+  </div>
+
+  <div class="block">
+    <h3>سجل النسب في الإنسان</h3>
+    <p class="sub">دراسة انتقال الصفات في الإنسان ليست سهلة، لأن الفترة بين جيل وآخر طويلة، ولأن عدد الأفراد الناتجين عن كل تزاوج قليل. لذلك يلجأ العلماء إلى سجل النسب، وهو مخطط يوضح كيفية انتقال الصفة وجيناتها من جيل إلى جيل في عائلة محددة. هذا مثال توضيحي للمهاق (الألبينو)، وهو صفة متنحية.</p>
+    <div class="lab"><div class="xp">
+      <div><svg id="pedSvg" viewBox="0 0 520 300" role="img" aria-label="سجل نسب لعائلة"></svg>
+        <div class="row" style="font-size:13.5px;color:var(--muted)"><span>مربع: ذكر</span><span>دائرة: أنثى</span><span>مظلل: مصاب</span></div></div>
+      <div><div class="info" id="pedInfo" aria-live="polite"><p>اضغط على أحد أفراد العائلة لترى تركيبه الجيني المحتمل. الأليل السائد A والمتنحي a.</p></div>
+        <p class="callout">أبوان سليمان وابنة مصابة. تدل هذه الحالة على أن الصفة متنحية، فلو كانت سائدة لظهرت على أحد الأبوين. واحتمال إصابة الابن التالي 25%.</p></div>
+    </div></div>
+  </div>
+
+  <div class="block">
+    <h3>الارتباط والعبور</h3>
+    <p class="sub">إذا كانت الجينات على كروموسومات مختلفة فهي تتوزع مستقلة. لكن الكروموسوم الواحد يحمل جينات كثيرة، وتنتقل الجينات الواقعة عليه معًا في أغلب الأحيان. هذا هو الارتباط.</p>
+    <div class="lab">
+      <h4>تجربة باتسون وبانت على البازلاء السكرية</h4>
+      <p class="hint">توقع قانون التوزيع المستقل نسبة 9 : 3 : 3 : 1 بين النباتات الأربعة. لكن النتائج الفعلية كانت مختلفة، فظهر من الصفات الأبوية أكثر من المتوقع.</p>
+      <div id="lkChart" dir="ltr"></div>
+      <div class="info"><p>فسّر العالم مورجان لاحقًا ذلك بأن الجينين على الكروموسوم نفسه. وبعض الأفراد حملت ارتباطات جديدة، وهي نتيجة عملية تسمى <b>العبور</b>.</p></div>
+    </div>
+    <div class="lab" style="margin-top:16px">
+      <h4>العبور في الانقسام الميوزي</h4>
+      <p class="hint">في الطور التمهيدي الأول تتبادل الكروماتيدات الداخلية المتجاورة أجزاء من مادتها الوراثية عند مواضع تسمى كيازما. اضغط الزر لترى ما يحدث.</p>
+      <div class="xp"><svg id="coSvg" viewBox="0 0 440 280" role="img" aria-label="كروموسومان متماثلان قبل العبور وبعده"></svg>
+        <div><button class="btn" id="coBtn">حدوث العبور</button><div class="info" id="coInfo" aria-live="polite"></div></div></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>الوراثة والجنس</h3>
+    <p class="sub">في الخلية البشرية 46 كروموسومًا في 23 زوجًا: 22 زوجًا جسميًا وزوج جنسي. الأنثى XX والذكر XY. تحمل البويضات X دائمًا، ونصف الحيوانات المنوية X ونصفها Y.</p>
+    <div class="grid2">
+      <div class="lab">
+        <h4>من يحدد جنس المولود؟</h4>
+        <div id="sxOut"></div>
+        <div class="row" style="margin-top:12px"><button class="btn" id="sxBtn">إنجاب 20 مولودًا</button></div>
+        <div class="peas" id="sxKids" style="margin-top:10px;min-height:20px"></div>
+        <p class="ratio" id="sxTxt"></p>
+      </div>
+      <div class="lab">
+        <h4>الصفات المرتبطة بالجنس</h4>
+        <div class="chips" id="slTog" style="margin-bottom:10px"></div>
+        <div id="slOut"></div>
+      </div>
+    </div>
+    <div class="lab" style="margin-top:16px">
+      <h4>صفة تتأثر بالجنس: الصلع</h4>
+      <p class="hint">للأليلين B وb تأثير يختلف في الجنسين، لأن الهرمونات الجنسية تؤثر في ظهور الصفة.</p>
+      <div class="tbl"><table class="t">
+        <tr><th>التركيب الجيني</th><th>ذكر</th><th>أنثى</th></tr>
+        <tr><td lang="en" dir="ltr">BB</td><td>أصلع</td><td>خفيفة الشعر</td></tr>
+        <tr><td lang="en" dir="ltr">Bb</td><td>أصلع</td><td>عادية الشعر</td></tr>
+        <tr><td lang="en" dir="ltr">bb</td><td>عادي الشعر</td><td>عادية الشعر</td></tr>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h3>اختبر نفسك</h3>
+    <div class="lab" id="quizGen"></div>
+  </div>
+</div></section>
+
+<!-- ===================== المراجعة ===================== -->
+<section class="chap ch-plants" id="review"><div class="in">
+  <div class="chap-head">
+    <p class="eyebrow">مراجعة</p>
+    <h2>بطاقات المصطلحات وتقدّمك</h2>
+    <p class="lead">اضغط على كل بطاقة لتظهر تعريف المصطلح. حاول أن تتذكر التعريف قبل أن تقلبها.</p>
+  </div>
+  <div class="fc" id="fc"></div>
+  <div class="block">
+    <h3>ملخص التقدم</h3>
+    <div class="lab" id="sum"></div>
+    <div class="row" style="margin-top:14px"><button class="btn alt" id="resetAll">ابدأ من جديد</button></div>
+  </div>
+</div></section>
+
+<footer><div class="in"><p class="copy">© جميع حقوق النشر محفوظة لمعلمة الأحياء دانه مبارك الحيص</p>محتوى هذا الكتاب مأخوذ من دروس الأحياء: تركيب النباتات، والتغذية في النباتات، وأساسيات علم الوراثة. الرسوم تعليمية مبسّطة والأمثلة التوضيحية مصمّمة لشرح الفكرة.</div></footer>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function gcd(a,b){return b?gcd(b,a%b):a}
+function rnd(n){var x=Math.sin(n*12.9898)*43758.5453;return x-Math.floor(x)}
+function chips(box,items,onPick,first){
+  box.innerHTML=items.map(function(it){return '<button class="chip" data-k="'+it.k+'" aria-pressed="false">'+it.l+'</button>'}).join('');
+  var bs=$$('button',box);
+  function pick(k){bs.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.k===k))});onPick(k)}
+  bs.forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.k)})});
+  if(first!==false)pick(items[0].k);
+  return pick;
+}
+
+/* ---------- tabs ---------- */
+$$('.tabgroup').forEach(function(g){
+  var list=g.children[0];
+  var btns=$$('button',list);
+  var panels=Array.prototype.filter.call(g.children,function(c){return c.classList.contains('tabpanel')});
+  function sel(id){btns.forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.t===id))});panels.forEach(function(p){p.hidden=p.dataset.p!==id})}
+  btns.forEach(function(b){b.addEventListener('click',function(){sel(b.dataset.t)})});
+  sel(btns[0].dataset.t);
+});
+
+/* ---------- hero leaf ---------- */
+(function(){
+  var s=$('#heroLeaf');var v='<path class="lf" d="M160 18C268 88 272 252 160 342C48 252 52 88 160 18Z"/><path class="vn" d="M160 30V356" stroke-width="3"/>';
+  var ws=[40,54,68,82,68,50,32];
+  for(var i=0;i<7;i++){var y=90+i*38,w=ws[i];
+    v+='<path class="vn" d="M160 '+y+'Q'+(160-w*0.6)+' '+(y-18)+' '+(160-w)+' '+(y-42)+'"/><path class="vn" d="M160 '+y+'Q'+(160+w*0.6)+' '+(y-18)+' '+(160+w)+' '+(y-42)+'"/>';}
+  s.setAttribute('viewBox','0 0 320 370');s.innerHTML=v;
+})();
+
+/* ---------- generic explorer ---------- */
+function explorer(svg,btnBox,info,data,order,sw){
+  btnBox.innerHTML=order.map(function(k){return '<button class="chip" data-k="'+k+'" aria-pressed="false">'+(sw&&sw[k]?'<i class="sw" style="background:'+sw[k]+'"></i>':'')+data[k].n+'</button>'}).join('');
+  var bs=$$('button',btnBox);
+  function pick(k){
+    svg.classList.add('sel');
+    $$('[data-p]',svg).forEach(function(n){n.classList.toggle('on',n.dataset.p.split(' ').indexOf(k)>-1)});
+    bs.forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.k===k))});
+    info.innerHTML='<h4>'+data[k].n+'</h4><p>'+data[k].d+'</p>';
+  }
+  bs.forEach(function(b){b.addEventListener('click',function(){pick(b.dataset.k)})});
+  $$('[data-p]',svg).forEach(function(n){n.addEventListener('click',function(){pick(n.dataset.p.split(' ')[0])})});
+  info.innerHTML='<p>اضغط على أحد الأجزاء في الرسم أو اختر اسمه من القائمة.</p>';
+}
+
+/* ---------- leaf kinds ---------- */
+(function(){
+  var K={
+    netted:{n:'ثنائية الفلقة',d:'عروق الورقة ثنائية الفلقة عادة متفرعة وشبكية. تدخل العروق من عنق الورقة إلى النصل وتتفرع في أنحائه.',
+      s:function(){var v='<path class="lf" d="M100 12C165 55 165 140 100 182C35 140 35 55 100 12Z"/><path class="vn" d="M100 22V200" stroke-width="3.5"/>';
+        [[62,40],[88,52],[114,50],[140,36]].forEach(function(a){v+='<path class="vn" d="M100 '+(a[0]+60)+'Q'+(100-a[1]*0.5)+' '+(a[0]+36)+' '+(100-a[1])+' '+(a[0]+18)+'"/><path class="vn" d="M100 '+(a[0]+60)+'Q'+(100+a[1]*0.5)+' '+(a[0]+36)+' '+(100+a[1])+' '+(a[0]+18)+'"/>'});
+        return v}},
+    parallel:{n:'أحادية الفلقة',d:'تكون عروق الورقة أحادية الفلقة متوازية عادة، كما في أوراق الأعشاب والنخيل.',
+      s:function(){var v='<path class="lf" d="M100 10C140 70 140 140 100 186C60 140 60 70 100 10Z"/>';
+        [-20,-10,0,10,20].forEach(function(o){v+='<path class="vn" d="M'+(100+o*0.5)+' 180Q'+(100+o*1.3)+' 100 '+(100+o*0.3)+' 24"/>'});return v}},
+    needle:{n:'إبرية',d:'في الصنوبر والنباتات المخروطية الأخرى تكون الأوراق على شكل إبر تساعد على التخلص من الثلوج. وتحتفظ هذه النباتات بأوراقها طوال العام.',
+      s:function(){return '<path class="vn" d="M100 190L58 18M100 190L100 8M100 190L142 18" stroke-width="5"/><path class="vn" d="M82 190H118" stroke-width="9" stroke="var(--root)"/>'}},
+    pinnate:{n:'مركّبة ريشية',d:'وريقاتها تشبه ريش الطيور، ولها عروق متفرعة من العرق المركزي الرئيسي الذي يسمى العرق الأوسط. من أمثلتها نخيل جوز الهند وأشجار الدردار والجوز وشجيرة الورد.',
+      s:function(){var v='<path class="vn" d="M100 196V30" stroke-width="3.5"/>';
+        for(var i=0;i<4;i++){var y=165-i*32;v+='<ellipse class="lf" cx="68" cy="'+y+'" rx="30" ry="12" transform="rotate(-28 68 '+y+')"/><ellipse class="lf" cx="132" cy="'+y+'" rx="30" ry="12" transform="rotate(28 132 '+y+')"/>'}
+        v+='<ellipse class="lf" cx="100" cy="24" rx="12" ry="26"/>';return v}},
+    palmate:{n:'مركّبة راحية',d:'تشبه راحة اليد، وفيها وريقات عديدة تتشعب جميعها من نقطة مركزية. من أمثلتها أوراق نبات الفراولة والترمس وأشجار الكستناء.',
+      s:function(){var v='<path class="vn" d="M100 196V150" stroke-width="3.5"/>';
+        [-60,-30,0,30,60].forEach(function(a){v+='<ellipse class="lf" rx="13" ry="45" transform="translate(100 150) rotate('+a+') translate(0 -46)"/>'});return v}}
+  };
+  var order=['netted','parallel','needle','pinnate','palmate'];
+  chips($('#leafChips'),order.map(function(k){return {k:k,l:K[k].n}}),function(k){
+    $('#leafSvg').innerHTML=K[k].s();$('#leafInfo').innerHTML='<h4>ورقة '+K[k].n+'</h4><p>'+K[k].d+'</p>';
+  });
+})();
+
+/* ---------- leaf anatomy ---------- */
+(function(){
+  var s='<g data-p="cuticle"><rect x="30" y="20" width="580" height="12" rx="3" class="a-wax"/></g>';
+  var u='';for(var i=0;i<10;i++)u+='<rect x="'+(30+i*58)+'" y="32" width="56" height="34" rx="5" class="a-epi"/>';
+  s+='<g data-p="upper">'+u+'</g>';
+  var p='';for(i=0;i<15;i++){var x=34+i*38.5;p+='<rect x="'+x+'" y="70" width="34" height="88" rx="12" class="a-pal"/><circle cx="'+(x+10)+'" cy="'+(88+(i%3)*8)+'" r="4.5" class="a-chl"/><circle cx="'+(x+24)+'" cy="'+(110+(i%2)*10)+'" r="4.5" class="a-chl"/><circle cx="'+(x+14)+'" cy="'+(138-(i%3)*4)+'" r="4.5" class="a-chl"/>'}
+  s+='<g data-p="palisade">'+p+'</g>';
+  var sp='';var n=0;
+  for(var r=0;r<3;r++)for(var c=0;c<11;c++){
+    var cx=62+c*52+(r%2)*26+(rnd(++n)-0.5)*12,cy=186+r*42+(rnd(++n)-0.5)*10;
+    if(Math.hypot(cx-320,cy-236)<66)continue;
+    sp+='<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+(19+rnd(++n)*5).toFixed(1)+'" class="a-spo"/><circle cx="'+(cx-5).toFixed(1)+'" cy="'+(cy-3).toFixed(1)+'" r="3.2" class="a-chl"/><circle cx="'+(cx+6).toFixed(1)+'" cy="'+(cy+5).toFixed(1)+'" r="3.2" class="a-chl"/>';
+  }
+  s+='<g data-p="spongy">'+sp+'</g>';
+  s+='<g data-p="vein"><circle cx="320" cy="236" r="44" class="a-sheath"/><circle cx="304" cy="224" r="16" class="a-xyl"/><circle cx="339" cy="249" r="14" class="a-phl"/></g>';
+  var lo='';for(i=0;i<10;i++){if(i===7)continue;lo+='<rect x="'+(30+i*58)+'" y="296" width="56" height="34" rx="5" class="a-epi"/>'}
+  s+='<g data-p="lower">'+lo+'</g>';
+  s+='<g data-p="stoma"><rect x="436" y="296" width="56" height="34" rx="5" fill="none"/><ellipse cx="452" cy="313" rx="11" ry="17" class="a-gc"/><ellipse cx="476" cy="313" rx="11" ry="17" class="a-gc"/><rect x="462" y="300" width="4" height="26" class="a-gap"/><circle cx="452" cy="313" r="3" class="a-chl"/><circle cx="476" cy="313" r="3" class="a-chl"/></g>';
+  $('#anatSvg').innerHTML=s;
+  var D={
+    cuticle:{n:'الكيوتيكل',d:'طبقة من الشمع تغطي السطح العلوي لمعظم الأوراق. تؤدي مع طبقة البشرة دورًا في منع تسرّب الماء إلى خارج الورقة.'},
+    upper:{n:'البشرة العليا',d:'طبقة من الأنسجة الجلدية تغلّف سطح الورقة العلوي وتحميه.'},
+    palisade:{n:'النسيج العمادي',d:'يقع أسفل النسيج العلوي مباشرة. خلاياه مستطيلة الشكل متراصة بعضها على بعض وغنية بالبلاستيدات الخضراء، فتمتص الضوء الذي يقع على الورقة.'},
+    spongy:{n:'النسيج الإسفنجي',d:'خلايا غير منتظمة الشكل متباعدة بعضها عن بعض. تمتلئ الفراغات بينها بالهواء، ويتصل هذا الهواء بالهواء الخارجي عبر الثغور.'},
+    vein:{n:'الحزمة الوعائية',d:'تتصل الأنسجة الوعائية للورقة بأنسجة الساق. الخشب ينقل الماء والأملاح المعدنية، واللحاء ينقل السكريات الناتجة من البناء الضوئي.'},
+    lower:{n:'البشرة السفلى',d:'طبقة من الأنسجة الجلدية تغلف سطح الورقة السفلي، وتوجد فيها الثغور.'},
+    stoma:{n:'الثغر والخليتان الحارستان',d:'يتبادل الأكسجين وثاني أكسيد الكربون بين الورقة والهواء المحيط عبر الثغور، ويفقد الماء خارج الورقة من خلالها أيضًا.'}
+  };
+  explorer($('#anatSvg'),$('#anatBtns'),$('#anatInfo'),D,['cuticle','upper','palisade','spongy','vein','lower','stoma'],
+    {cuticle:'var(--wax)',upper:'var(--epi)',palisade:'var(--pal)',spongy:'var(--spo)',vein:'var(--xyl)',lower:'var(--epi)',stoma:'var(--gc)'});
+})();
+
+/* ---------- stomata ---------- */
+(function(){
+  var W=$('#stW');
+  var drops=[[0,-30],[0,10],[0,40],[0,-5],[0,25],[0,-45],[0,55],[0,-18]];
+  function draw(w){
+    var rx=22+w*0.1,ry=78+w*0.08,g=w<35?0:(w-35)*0.45;
+    var l=200-g/2-rx,r=200+g/2+rx;
+    var s='<rect x="10" y="8" width="380" height="204" rx="14" class="a-epi"/>';
+    if(g>0.5)s+='<ellipse cx="200" cy="110" rx="'+(g/2+1)+'" ry="'+(ry-14)+'" class="a-gap"/>';
+    s+='<ellipse cx="'+l.toFixed(1)+'" cy="110" rx="'+rx.toFixed(1)+'" ry="'+ry.toFixed(1)+'" class="a-gc"/><ellipse cx="'+r.toFixed(1)+'" cy="110" rx="'+rx.toFixed(1)+'" ry="'+ry.toFixed(1)+'" class="a-gc"/>';
+    var nd=Math.round(w/12.5);
+    for(var i=0;i<nd&&i<drops.length;i++){var d=drops[i];
+      s+='<circle cx="'+(l+(i%2?-1:1)*rx*0.35).toFixed(1)+'" cy="'+(110+d[1])+'" r="4.5" style="fill:var(--water)"/><circle cx="'+(r+(i%2?1:-1)*rx*0.35).toFixed(1)+'" cy="'+(110+d[1])+'" r="4.5" style="fill:var(--water)"/>';}
+    s+='<circle cx="'+l.toFixed(1)+'" cy="62" r="4" class="a-chl"/><circle cx="'+r.toFixed(1)+'" cy="62" r="4" class="a-chl"/>';
+    s+='<text x="200" y="204" text-anchor="middle" class="svt s">خليتان حارستان</text>';
+    $('#stSvg').innerHTML=s;
+    $('#stWv').textContent=Math.round(w)+'%';
+    $('#stState').textContent=g>0.5?(g>12?'الثغر مفتوح: الخليتان منتفختان بالماء، فيدخل ثاني أكسيد الكربون ويخرج الأكسجين.':'الثغر مفتوح قليلًا: ماء الخليتين غير كافٍ.'):'الثغر مغلق: فقدت الخليتان الماء فارتخيتا واقترب جدارهما، فيقل فقد الماء.';
+  }
+  function fromFactors(){
+    var w=($('#fDay').checked?75:20)-($('#fHot').checked?35:0)-($('#fBright').checked?25:0)-($('#fWind').checked?30:0)-($('#fDry').checked?35:0);
+    w=Math.max(0,Math.min(100,w));W.value=w;draw(w);
+  }
+  W.addEventListener('input',function(){draw(+W.value)});
+  ['fDay','fHot','fBright','fWind','fDry'].forEach(function(id){$('#'+id).addEventListener('change',fromFactors)});
+  draw(75);
+})();
+
+/* ---------- stems ---------- */
+(function(){
+  var S={
+    herb:{n:'نباتات عشبية',d:'سوقها غير خشبية وتتكون من أنسجة لينة نسبيًا مغطاة بطبقة واقية رقيقة، ولذلك تكون قوتها ومتانتها أقل. مثال: نبتة عشبية بأزهار بيضاء.'},
+    shrub:{n:'شجيرات',d:'لها سوق خشبية قوية، وهي أصغر حجمًا من الأشجار وتتفرع إلى فروع وغصينات.'},
+    vine:{n:'نباتات متسلقة أو معترشة',d:'ساقها لا تحمل النبتة بنفسها، وعادة ما تدعمها الأشجار أو دعامات أخرى.'},
+    tree:{n:'أشجار',d:'سوقها خشبية وقوية ذات جذع وفروع وغصينات، وتحمل أوراقًا كثيرة.'}
+  };
+  chips($('#stemChips'),['herb','shrub','vine','tree'].map(function(k){return {k:k,l:S[k].n}}),function(k){$('#stemInfo').innerHTML='<h4>'+S[k].n+'</h4><p>'+S[k].d+'</p>'});
+  var mono=[[160,70],[118,88],[205,92],[145,120],[188,128],[110,140],[225,140],[160,160],[128,182],[198,178],[90,115],[240,108],[150,205],[190,210]];
+  function bundle(x,y,dx,dy){return '<circle cx="'+x+'" cy="'+y+'" r="13" class="a-sheath"/><circle cx="'+(x-dx*5).toFixed(1)+'" cy="'+(y-dy*5).toFixed(1)+'" r="5.2" class="a-xyl"/><circle cx="'+(x+dx*5).toFixed(1)+'" cy="'+(y+dy*5).toFixed(1)+'" r="5.2" class="a-phl"/>'}
+  function draw(k){
+    var s='<circle cx="160" cy="130" r="118" class="st-body"/><circle cx="160" cy="130" r="118" fill="none" class="st-epi"/>';
+    if(k==='mono'){mono.forEach(function(p){var a=Math.atan2(p[1]-130,p[0]-160);s+=bundle(p[0],p[1],Math.cos(a),Math.sin(a))});
+      $('#stemTxt').innerHTML='<h4>ساق أحادية الفلقة</h4><p>تتواجد الحزم الوعائية بشكل مبعثر بين خلايا النسيج الأساسي.</p>';}
+    else{s+='<circle cx="160" cy="130" r="50" style="fill:var(--pale)"/><circle cx="160" cy="130" r="68" fill="none" stroke="var(--leaf)" stroke-width="2" stroke-dasharray="5 4"/>';
+      for(var i=0;i<10;i++){var a=i/10*Math.PI*2;s+=bundle((160+Math.cos(a)*76).toFixed(1),(130+Math.sin(a)*76).toFixed(1),Math.cos(a),Math.sin(a))}
+      s+='<text x="160" y="134" text-anchor="middle" class="svt s">النخاع</text>';
+      $('#stemTxt').innerHTML='<h4>ساق ثنائية الفلقة</h4><p>تتوزع الحزم الوعائية بشكل دائري منظم في حلقة حول مجموعة من الخلايا البرنشيمية في مركز الساق، ويسمى النخاع. يقع الكامبيوم (النسيج الإنشائي) بين الخشب واللحاء.</p>';}
+    $('#stemSvg').innerHTML=s;
+  }
+  chips($('#stemTog'),[{k:'mono',l:'أحادية الفلقة'},{k:'di',l:'ثنائية الفلقة'}],draw);
+})();
+
+/* ---------- roots ---------- */
+(function(){
+  function draw(k){
+    var s='<rect x="0" y="40" width="300" height="220" style="fill:var(--soil)"/><path d="M150 40V4" stroke="var(--leaf)" stroke-width="7" stroke-linecap="round"/><path d="M0 40H300" stroke="var(--leaf)" stroke-width="3"/>';
+    if(k==='tap'){
+      s+='<path d="M150 40C150 100 152 160 150 246" fill="none" stroke="var(--root)" stroke-width="10" stroke-linecap="round"/>';
+      [60,90,120,150,180].forEach(function(y,i){[-1,1].forEach(function(d){s+='<path d="M150 '+y+'Q'+(150+d*34)+' '+(y+6)+' '+(150+d*(56+i*6))+' '+(y+30)+'" fill="none" stroke="var(--root)" stroke-width="3" stroke-linecap="round"/>'})});
+      $('#rootTxt').innerHTML='<h4>الجذر الوتدي</h4><p>جذر مركزي كبير الحجم يحمل الكثير من الجذور الجانبية التي تتفرع منه. يوجد في النباتات ثنائية الفلقة. ينمو عميقًا تحت الأرض لتمتص المياه الجوفية، ويثبّت النبات بقوة في التربة.</p>';
+    }else{
+      for(var i=0;i<16;i++){var a=(i/15-0.5)*2.3,l=46+rnd(i+3)*52;var x2=150+Math.sin(a)*l*1.5,y2=44+Math.cos(a)*l;
+        s+='<path d="M150 42Q'+(150+Math.sin(a)*l*0.5)+' '+(44+l*0.5)+' '+x2.toFixed(1)+' '+y2.toFixed(1)+'" fill="none" stroke="var(--root)" stroke-width="3" stroke-linecap="round"/>';}
+      $('#rootTxt').innerHTML='<h4>الجذر الليفي</h4><p>يبدو كتلة من التراكيب الخيطية الرفيعة والقصيرة. غالبًا ما تنمو في السنتيمترات القليلة العلوية من التربة، فتمتص الماء والعناصر المعدنية من الطبقة السطحية. تلتف حول حبيبات التربة وتمنع تآكل الطبقات السطحية. الحشائش مثال نموذجي عليه.</p>';}
+    $('#rootSvg').innerHTML=s;
+  }
+  chips($('#rootTog'),[{k:'tap',l:'الجذر الوتدي'},{k:'fib',l:'الجذر الليفي'}],draw);
+})();
+
+/* ---------- flowers ---------- */
+(function(){
+  var F=[
+    {n:'التلقيح',d:'ينتقل حبوب اللقاح، وفيها الأمشاج الذكرية، من الأجزاء المذكّرة إلى الأجزاء المؤنثة في الزهرة. قد تنقلها الرياح أو الماء أو الحشرات أو كائنات أخرى. وتنتج النباتات كميات كبيرة من حبوب اللقاح لضمان حدوث العملية.'},
+    {n:'الإخصاب',d:'تتحد الأمشاج الذكرية بالأمشاج المؤنثة (البيض) داخل الزهرة. وهو خطوة من خطوات التكاثر الجنسي في النباتات الزهرية، وتتبع التلقيح.'},
+    {n:'تكوّن الثمرة',d:'تحمي الثمرة بذرة واحدة أو أكثر. وتحتوي البذرة على أجنّة النباتات.'},
+    {n:'انتشار البذور',d:'تؤدي الثمار في الغالب دورًا في انتشار البذور إلى مواضع جديدة.'}
+  ];
+  var box=$('#flSteps');
+  box.innerHTML=F.map(function(f,i){return '<button data-i="'+i+'" aria-pressed="false" aria-label="الخطوة '+(i+1)+': '+f.n+'">'+(i+1)+'</button>'}).join('');
+  function pick(i){$$('button',box).forEach(function(b,j){b.setAttribute('aria-pressed',String(j===i))});$('#flInfo').innerHTML='<h4>'+(i+1)+'. '+F[i].n+'</h4><p>'+F[i].d+'</p>'}
+  $$('button',box).forEach(function(b){b.addEventListener('click',function(){pick(+b.dataset.i)})});
+  pick(0);
+})();
+
+/* ---------- photosynthesis simulator ---------- */
+(function(){
+  var st={light:true,water:true,co2:true,chl:true};
+  var names={light:'ضوء الشمس',water:'الماء',co2:'ثاني أكسيد الكربون',chl:'الكلوروفيل'};
+  var defs='<defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" style="fill:var(--ink)"/></marker></defs>';
+  var rays='';[[110,64,250,120],[104,84,236,150],[90,100,226,176]].forEach(function(r){rays+='<line x1="'+r[0]+'" y1="'+r[1]+'" x2="'+r[2]+'" y2="'+r[3]+'" stroke="var(--sun)" stroke-width="4" stroke-dasharray="8 6" marker-end="url(#ah)"/>'});
+  var sunRays='';for(var i=0;i<8;i++){var a=i*Math.PI/4;sunRays+='<line x1="'+(60+Math.cos(a)*34)+'" y1="'+(56+Math.sin(a)*34)+'" x2="'+(60+Math.cos(a)*48)+'" y2="'+(56+Math.sin(a)*48)+'" stroke="var(--sun)" stroke-width="5" stroke-linecap="round"/>'}
+  var svg=defs+
+   '<g id="sSun"><circle cx="60" cy="56" r="26" style="fill:var(--sun)"/>'+sunRays+'</g><g id="sRays">'+rays+'</g>'+
+   '<path id="sLeaf" d="M330 60C450 100 470 220 330 282C190 220 210 100 330 60Z" stroke="var(--leaf)" stroke-width="3"/>'+
+   '<path d="M330 70V310" stroke="var(--leaf)" stroke-width="3" fill="none"/>'+
+   '<g id="sWater"><line x1="330" y1="334" x2="330" y2="296" stroke="var(--water)" stroke-width="6" marker-end="url(#ah)"/><text x="344" y="326" class="svt lat" style="font-weight:600">H₂O</text></g>'+
+   '<g id="sCO2"><line x1="580" y1="176" x2="470" y2="176" stroke="var(--ink)" stroke-width="5" marker-end="url(#ah)"/><text x="520" y="164" class="svt lat" text-anchor="middle" style="font-weight:600">CO₂</text></g>'+
+   '<g id="sO2"><line x1="214" y1="236" x2="110" y2="290" stroke="var(--good)" stroke-width="5" marker-end="url(#ah)"/><text x="100" y="316" class="svt lat" text-anchor="middle" style="font-weight:600">O₂</text><circle class="bub" cx="150" cy="266" r="5" style="fill:var(--good)"/><circle class="bub" cx="176" cy="252" r="4" style="fill:var(--good);animation-delay:.8s"/><circle class="bub" cx="128" cy="280" r="3.5" style="fill:var(--good);animation-delay:1.5s"/></g>'+
+   '<g id="sGlu"><rect x="268" y="146" width="124" height="34" rx="8" style="fill:var(--surface)" stroke="var(--leaf)"/><text x="330" y="169" text-anchor="middle" class="svt lat" style="font-weight:600">C₆H₁₂O₆</text></g>';
+  $('#simSvg').innerHTML=svg;
+  var box=$('#simChips');
+  box.innerHTML=Object.keys(names).map(function(k){return '<button class="chip" data-k="'+k+'" aria-pressed="true">'+names[k]+'</button>'}).join('');
+  function upd(){
+    var all=st.light&&st.water&&st.co2&&st.chl;
+    function o(id,on,off){$(id).style.opacity=on?1:(off||0.2)}
+    o('#sSun',st.light);o('#sRays',st.light,0.08);o('#sWater',st.water);o('#sCO2',st.co2);
+    $('#sLeaf').style.fill=st.chl?'var(--leaffill)':'var(--pale)';
+    o('#sO2',all,0);o('#sGlu',all,0);
+    var miss=Object.keys(names).filter(function(k){return !st[k]}).map(function(k){return names[k]});
+    $('#simState').textContent=all?'تنتج الورقة السكر (الجلوكوز) وتطلق الأكسجين.':'لا يحدث البناء الضوئي. ينقص: '+miss.join('، ')+'.';
+    $$('button',box).forEach(function(b){b.setAttribute('aria-pressed',String(st[b.dataset.k]))});
+  }
+  $$('button',box).forEach(function(b){b.addEventListener('click',function(){st[b.dataset.k]=!st[b.dataset.k];upd()})});
+  upd();
+})();
+
+/* ---------- chloroplast ---------- */
+(function(){
+  var s='<ellipse data-p="membrane" cx="280" cy="150" rx="256" ry="128" class="c-out"/><ellipse data-p="stroma" cx="280" cy="150" rx="240" ry="112" class="c-str"/>';
+  var st=[[120,105],[215,185],[310,110],[405,190],[470,120]];
+  for(var i=0;i<st.length-1;i++){s+='<path data-p="granum" d="M'+(st[i][0]+36)+' '+(st[i][1])+'L'+(st[i+1][0]-36)+' '+(st[i+1][1])+'" class="c-lam"/>'}
+  st.forEach(function(p){for(var k=0;k<5;k++)s+='<rect data-p="granum thylakoid" x="'+(p[0]-36)+'" y="'+(p[1]-24+k*11)+'" width="72" height="8" rx="4" class="c-disc"/>'});
+  [[70,170],[180,95],[345,170],[250,215],[435,140]].forEach(function(p){s+='<circle data-p="stroma" cx="'+p[0]+'" cy="'+p[1]+'" r="6" style="fill:var(--wax)"/>'});
+  $('#chlSvg').innerHTML=s;
+  var D={
+    membrane:{n:'الغشاء المزدوج',d:'يحيط بالبلاستيدة الخضراء. وهي عضية توجد بكمّيات كبيرة في خلايا الأوراق النباتية.'},
+    stroma:{n:'الستروما (الحشوة)',d:'مادة جيلاتينية عديمة اللون تحيط بالجرانا وتحتوي على حبيبات من النشا وقطرات دهنية. تحدث فيها دورة كالفن (التفاعلات غير المعتمدة على الضوء).'},
+    granum:{n:'الجرانا',d:'أكياس غشائية قرصية الشكل متراصة بعضها فوق بعض. ويسمى كل مجموعة منها جرانم. وتمتد حافات الثايلاكويد خارج الجرانا لتشكّل الصفائح الوسطية التي تلتقي بجرانا مجاورة.'},
+    thylakoid:{n:'الثايلاكويد',d:'القرص الواحد من الجرانا، وقد يصل عدد الأقراص إلى 15 قرصًا أو أكثر في الجرانا الواحدة. يحتوي على صبغة الكلوروفيل وجميع الأصباغ اللازمة للبناء الضوئي، وتحدث على أغشيته التفاعلات الضوئية.'}
+  };
+  explorer($('#chlSvg'),$('#chlBtns'),$('#chlInfo'),D,['membrane','stroma','granum','thylakoid'],{membrane:'var(--leaf)',stroma:'color-mix(in srgb,var(--leaf) 20%,var(--surface))',granum:'var(--chl)',thylakoid:'var(--chl)'});
+})();
+
+/* ---------- absorption spectrum ---------- */
+(function(){
+  function g(x,m,s){return Math.exp(-Math.pow((x-m)/s,2))}
+  function a(x){return Math.min(1,0.95*g(x,440,24)+0.8*g(x,672,15)+0.06)}
+  function b(x){return Math.min(1,0.88*g(x,478,22)+0.35*g(x,652,14)+0.06)}
+  var X0=44,X1=604,Y0=16,Y1=170;
+  function px(x){return X0+(x-400)/300*(X1-X0)}
+  function py(v){return Y1-v*(Y1-Y0)}
+  function path(f){var d='';for(var x=400;x<=700;x+=4)d+=(d?'L':'M')+px(x).toFixed(1)+' '+py(f(x)).toFixed(1);return d}
+  var s='<line x1="'+X0+'" y1="'+Y1+'" x2="'+X1+'" y2="'+Y1+'" stroke="var(--muted)"/><line x1="'+X0+'" y1="'+Y0+'" x2="'+X0+'" y2="'+Y1+'" stroke="var(--muted)"/>';
+  [400,450,500,550,600,650,700].forEach(function(x){s+='<line x1="'+px(x)+'" y1="'+Y1+'" x2="'+px(x)+'" y2="'+(Y1+5)+'" stroke="var(--muted)"/><text x="'+px(x)+'" y="'+(Y1+20)+'" text-anchor="middle" class="svt s">'+x+'</text>'});
+  s+='<text x="'+((X0+X1)/2)+'" y="'+(Y1+38)+'" text-anchor="middle" class="svt s">الطول الموجي (نانومتر)</text>';
+  s+='<text x="'+(X0+8)+'" y="'+(Y0+8)+'" class="svt s">امتصاص أعلى</text>';
+  s+='<path d="'+path(a)+'" fill="none" stroke="var(--sun)" stroke-width="3"/><path d="'+path(b)+'" fill="none" stroke="var(--chl)" stroke-width="3" stroke-dasharray="7 4"/>';
+  s+='<line id="spL" x1="'+px(450)+'" y1="'+Y0+'" x2="'+px(450)+'" y2="'+Y1+'" stroke="var(--ink)" stroke-width="2"/>';
+  s+='<g transform="translate(60 8)"><line x1="0" y1="0" x2="26" y2="0" stroke="var(--sun)" stroke-width="3"/><text x="32" y="4" class="svt s">كلوروفيل a</text><line x1="110" y1="0" x2="136" y2="0" stroke="var(--chl)" stroke-width="3" stroke-dasharray="7 4"/><text x="142" y="4" class="svt s">كلوروفيل b</text></g>';
+  $('#spChart').innerHTML='<svg viewBox="0 0 640 220" role="img" aria-label="منحنيات امتصاص الكلوروفيل">'+s+'</svg>';
+  function col(x){return x<450?'البنفسجي':x<490?'الأزرق':x<570?'الأخضر':x<590?'الأصفر':x<620?'البرتقالي':'الأحمر'}
+  function upd(){
+    var x=+$('#spR').value,v=Math.max(a(x),b(x));
+    $('#spL').setAttribute('x1',px(x));$('#spL').setAttribute('x2',px(x));
+    $('#spV').textContent=x+' نانومتر ('+col(x)+')';
+    var t;
+    if(v>0.55)t='يمتص الكلوروفيل هذا اللون بقوة، فيزوّد التفاعلات الضوئية بالطاقة.';
+    else if(v>0.25)t='يمتصه الكلوروفيل بدرجة متوسطة.';
+    else t='يمتصه الكلوروفيل بدرجة ضعيفة، وينعكس معظمه. لذلك تبدو معظم النباتات خضراء اللون.';
+    $('#spTxt').textContent=t;
+  }
+  $('#spR').addEventListener('input',upd);upd();
+})();
+
+/* ---------- Van Helmont ---------- */
+(function(){
+  var S={a:{l:'بداية التجربة',tree:2,soil:90,txt:'الصفصاف 2 كجم والتربة 90 كجم تقريبًا. سقاها بماء المطر فقط.'},
+          b:{l:'بعد 5 سنوات',tree:75,soil:89.945,txt:'زاد وزن الصفصاف إلى 75 كجم، بينما نقص وزن التربة 55 جرامًا فقط. استنتج فان هلمونت أن النمو جاء من الماء الذي أضافه. هل أصاب؟ اضغط على الزر لتعرف.'}};
+  function draw(k){
+    var d=S[k];
+    $('#vhView').innerHTML='<div class="pbar"><span style="width:90px">الصفصاف</span><i style="width:'+(d.tree/75*60)+'%;background:var(--leaf)"></i><b>'+d.tree+' كجم</b></div><div class="pbar"><span style="width:90px">التربة</span><i style="width:'+(d.soil/90*60)+'%;background:var(--root)"></i><b>'+d.soil+' كجم</b></div>';
+    $('#vhInfo').innerHTML='<p>'+d.txt+'</p>'+(k==='b'?'<button class="btn alt" id="vhRev">ماذا أهمل فان هلمونت؟</button><p id="vhAns" style="margin-top:10px" hidden>لم يأخذ في اعتباره أن مادة في الهواء، هي ثاني أكسيد الكربون، قد تكون أسهمت في زيادة وزن النبتة. ونعرف الآن أن نحو 90% من الماء الذي تمتصه النباتات يفقد بالتبخر ولا يستخدم في البناء الضوئي.</p>':'');
+    var r=$('#vhRev');if(r)r.addEventListener('click',function(){$('#vhAns').hidden=false});
+  }
+  chips($('#vhTog'),[{k:'a',l:S.a.l},{k:'b',l:S.b.l}],draw);
+})();
+
+/* ---------- genetics: traits ---------- */
+var TR=[
+  {k:'shape',n:'شكل البذور',L:'R',dom:'ملساء',rec:'مجعّدة'},
+  {k:'color',n:'لون البذور',L:'Y',dom:'صفراء',rec:'خضراء',dc:'var(--pea-y)',rc:'var(--pea-g)'},
+  {k:'pod',n:'شكل القرن',L:'I',dom:'منتفخ',rec:'محزّز'},
+  {k:'podc',n:'لون القرن',L:'G',dom:'أخضر',rec:'أصفر',dc:'var(--pea-g)',rc:'var(--pea-y)'},
+  {k:'flc',n:'لون الزهرة',L:'P',dom:'بنفسجي',rec:'أبيض',dc:'#8a5cc2',rc:'var(--white)'},
+  {k:'flp',n:'موضع الزهرة',L:'A',dom:'إبطي',rec:'طرفي'},
+  {k:'stem',n:'طول الساق',L:'T',dom:'طويل (أكثر من 1.5 م)',rec:'قصير (أقل من 0.5 م)',ds:'طويل',rs:'قصير'}
+];
+function trOpts(sel){sel.innerHTML=TR.map(function(t,i){return '<option value="'+i+'">'+t.n+'</option>'}).join('')}
+(function(){
+  var sel=$('#trSel');trOpts(sel);sel.value=6;
+  function sw(c,t){return c?'<i class="sw" style="background:'+c+';width:18px;height:18px;border-radius:50%"></i> ':''}
+  function show(){
+    var t=TR[+sel.value];
+    $('#trShow').innerHTML='<div class="info" style="margin:0"><h4>'+sw(t.dc)+'المظهر السائد</h4><p>'+t.dom+'</p></div><div class="info" style="margin:0"><h4>'+sw(t.rc)+'المظهر المتنحي</h4><p>'+t.rec+'</p></div>';
+    resetSow();
+  }
+  var grid=$('#sowGrid');
+  function resetSow(){grid.innerHTML='';$('#sowTxt').textContent='اضغط لزراعة نباتات الجيل الثاني. النسبة المتوقعة 3 سائدة : 1 متنحية.'}
+  function sow(n,draw){
+    var d=0,r=0,h='';
+    for(var i=0;i<n;i++){var dom=Math.random()<0.75;if(dom)d++;else r++;if(draw)h+='<span class="sq'+(dom?'':' r')+'"></span>'}
+    if(draw)grid.innerHTML=h;else grid.innerHTML='';
+    $('#sowTxt').textContent='سائدة: '+d+'  ·  متنحية: '+r+'  ·  النسبة ≈ '+(d/r).toFixed(2)+' : 1';
+  }
+  $('#sow64').addEventListener('click',function(){sow(64,true)});
+  $('#sow20k').addEventListener('click',function(){sow(20000,false)});
+  sel.addEventListener('change',show);show();
+})();
+
+/* ---------- Punnett ---------- */
+function norm(a,b){return [a,b].sort().join('')}
+function punTable(cols,rows,fn){
+  var h='<table class="pn"><tr><th></th>'+cols.map(function(c){return '<th>'+c+'</th>'}).join('')+'</tr>';
+  rows.forEach(function(r,ri){h+='<tr><th>'+r+'</th>'+cols.map(function(c,ci){return '<td>'+fn(ri,ci)+'</td>'}).join('')+'</tr>'});
+  return h+'</table>';
+}
+(function(){
+  trOpts($('#mT'));$('#mT').value=6;
+  function fillGen(){
+    var t=TR[+$('#mT').value],U=t.L,l=t.L.toLowerCase();
+    var o=[U+U,U+l,l+l].map(function(g){return '<option value="'+g+'">'+g+'</option>'}).join('');
+    var a=$('#mA').value,b=$('#mB').value;
+    $('#mA').innerHTML=o;$('#mB').innerHTML=o;
+    $('#mA').value=a&&a[0].toUpperCase()===U?a:U+l;$('#mB').value=b&&b[0].toUpperCase()===U?b:U+l;
+    chips($('#mPre'),[[U+U,l+l],[U+l,U+l],[U+l,l+l]].map(function(p){return {k:p.join('|'),l:p[0]+' × '+p[1]}}),function(k){var p=k.split('|');$('#mA').value=p[0];$('#mB').value=p[1];draw()},false);
+  }
+  function draw(){
+    var t=TR[+$('#mT').value],U=t.L,ps=$('#mA').value,pb=$('#mB').value;
+    var cnt={},ph={d:0,r:0};
+    var h=punTable([ps[0],ps[1]],[pb[0],pb[1]],function(ri,ci){
+      var g=norm(ps[ci],pb[ri]),dom=g.indexOf(U)>-1;
+      cnt[g]=(cnt[g]||0)+1;ph[dom?'d':'r']++;
+      return '<b>'+g+'</b><span class="'+(dom?'dm':'rc')+'"></span>'+(dom?(t.ds||t.dom):(t.rs||t.rec));
+    });
+    var l=U.toLowerCase();
+    var gt=[U+U,U+l,l+l].filter(function(g){return cnt[g]}).map(function(g){return cnt[g]+' '+g}).join(' : ');
+    var pt=(ph.d?ph.d+' سائد':'')+(ph.d&&ph.r?' : ':'')+(ph.r?ph.r+' متنحٍ':'');
+    $('#mOut').innerHTML=h+'<p class="ratio">النسبة الجينية: <span class="lat">'+gt+'</span></p><p class="ratio">النسبة المظهرية: '+pt+'</p>';
+  }
+  $('#mT').addEventListener('change',function(){fillGen();draw()});
+  $('#mA').addEventListener('change',draw);$('#mB').addEventListener('change',draw);
+  fillGen();$('#mA').value='Tt';$('#mB').value='Tt';draw();
+
+  /* dihybrid */
+  var O1='<option>RR</option><option>Rr</option><option>rr</option>',O2='<option>YY</option><option>Yy</option><option>yy</option>';
+  $('#dA1').innerHTML=O1;$('#dB1').innerHTML=O1;$('#dA2').innerHTML=O2;$('#dB2').innerHTML=O2;
+  ['#dA1','#dB1'].forEach(function(s){$(s).value='Rr'});['#dA2','#dB2'].forEach(function(s){$(s).value='Yy'});
+  function gam(g1,g2){var r=[];for(var i=0;i<2;i++)for(var j=0;j<2;j++)r.push(g1[i]+g2[j]);return r}
+  function pea(y,sm){return '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9" style="fill:'+(y?'var(--pea-y)':'var(--pea-g)')+'"'+(sm?'':' stroke="#3b3b2a" stroke-width="2.4" stroke-dasharray="3 2"')+'/></svg>'}
+  function drawD(){
+    var A=gam($('#dA1').value,$('#dA2').value),B=gam($('#dB1').value,$('#dB2').value);
+    var c={sy:0,sg:0,wy:0,wg:0};
+    var h=punTable(A,B,function(ri,ci){
+      var a=A[ci],b=B[ri];var g=norm(a[0],b[0])+norm(a[1],b[1]);
+      var sm=g.indexOf('R')>-1,y=g.indexOf('Y')>-1;c[(sm?'s':'w')+(y?'y':'g')]++;
+      return '<b class="lat">'+g+'</b>'+pea(y,sm);
+    });
+    var vals=[c.sy,c.sg,c.wy,c.wg],gg=vals.filter(Boolean).reduce(gcd);
+    h+='<div style="margin-top:12px"><div class="pbar"><span style="width:150px">'+pea(true,true)+' ملساء صفراء</span><i style="width:'+c.sy*8+'px"></i><b>'+c.sy+'</b></div>'+
+       '<div class="pbar"><span style="width:150px">'+pea(false,true)+' ملساء خضراء</span><i style="width:'+c.sg*8+'px"></i><b>'+c.sg+'</b></div>'+
+       '<div class="pbar"><span style="width:150px">'+pea(true,false)+' مجعّدة صفراء</span><i style="width:'+c.wy*8+'px"></i><b>'+c.wy+'</b></div>'+
+       '<div class="pbar"><span style="width:150px">'+pea(false,false)+' مجعّدة خضراء</span><i style="width:'+c.wg*8+'px"></i><b>'+c.wg+'</b></div></div>'+
+       '<p class="ratio">النسبة المظهرية: <span class="lat">'+vals.map(function(v){return v/gg}).join(' : ')+'</span> (من 16 تركيبًا)</p>';
+    $('#dOut').innerHTML=h;
+  }
+  ['#dA1','#dA2','#dB1','#dB2'].forEach(function(s){$(s).addEventListener('change',drawD)});drawD();
+})();
+
+/* ---------- test cross ---------- */
+(function(){
+  var hidden='Yy',kids=[];
+  function newPlant(){hidden=Math.random()<0.5?'YY':'Yy';kids=[];$('#tcPeas').innerHTML='';$('#tcRes').textContent='';$('#tcGuess').hidden=true;$$('#tcGuess .chip').forEach(function(b){b.setAttribute('aria-pressed','false')})}
+  function go(){
+    var h='';kids=[];
+    for(var i=0;i<8;i++){var y=hidden==='YY'?true:Math.random()<0.5;kids.push(y);h+='<span class="pea" style="background:'+(y?'var(--pea-y)':'var(--pea-g)')+'"></span>'}
+    $('#tcPeas').innerHTML=h;$('#tcGuess').hidden=false;$('#tcRes').textContent='';
+  }
+  $('#tcGo').addEventListener('click',go);$('#tcNew').addEventListener('click',newPlant);
+  $$('#tcGuess .chip').forEach(function(b){b.addEventListener('click',function(){
+    $$('#tcGuess .chip').forEach(function(x){x.setAttribute('aria-pressed',String(x===b))});
+    var ok=b.dataset.g===hidden,gr=kids.filter(function(y){return !y}).length;
+    $('#tcRes').style.color=ok?'var(--good)':'var(--bad)';
+    $('#tcRes').textContent=(ok?'صحيح. ':'ليس صحيحًا. ')+'النبتة المجهولة كانت '+hidden+'. ظهر '+gr+' من 8 أبناء بذورهم خضراء'+(hidden==='YY'?'، وهذا غير ممكن من نبتة نقية.':'.');
+  })});
+  newPlant();
+})();
+
+/* ---------- dominance patterns ---------- */
+(function(){
+  function flower(cols,size){
+    var p='';for(var i=0;i<6;i++)p+='<ellipse cx="22" cy="10" rx="6.5" ry="10" transform="rotate('+(i*60)+' 22 22)" style="fill:'+cols[i%cols.length]+'" stroke="rgba(0,0,0,.3)" stroke-width=".8"/>';
+    return '<svg viewBox="0 0 44 44" width="'+size+'" height="'+size+'" aria-hidden="true">'+p+'<circle cx="22" cy="22" r="4.5" style="fill:var(--pea-y)"/></svg>';
+  }
+  var RED=['var(--red)'],WH=['var(--white)'],PK=['var(--pink)'],RN=['var(--red)','var(--white)'];
+  var M={
+    complete:{l:'سيادة تامة',a:'R',b:'r',het:RED,hn:'أحمر',ht:'يختفي الأليل المتنحي. يظهر لون الأليل السائد فقط، فيشبه الهجين الفرد السائد النقي.',f2:'3 أحمر : 1 أبيض',ex:'مثال: لون زهرة البازلاء ولون البذور.'},
+    incomplete:{l:'سيادة غير تامة',a:'R',b:'W',het:PK,hn:'وردي',ht:'لا يسود أي أليل على الآخر. يظهر في الهجين مظهر وسط بين الأبوين، كما في أزهار حنك السبع (الأحمر × الأبيض = وردي). ومنه أيضًا دجاج الأندلس (الأسود × الأبيض = رمادي).',f2:'1 أحمر : 2 وردي : 1 أبيض',ex:''},
+    co:{l:'سيادة مشتركة',a:'R',b:'W',het:RN,hn:'أحمر وأبيض معًا',ht:'يظهر تأثير الأليلين كاملين في الفرد الهجين ومنفصلين، كما في أبقار الشورتهورن (شعر أحمر وأبيض معًا).',f2:'1 أحمر : 2 أحمر وأبيض معًا : 1 أبيض',ex:''}
+  };
+  function draw(k){
+    var m=M[k],A=m.a,B=m.b;
+    function ph(g){return g===A+A?{c:RED,n:'أحمر'}:g===B+B?{c:WH,n:'أبيض'}:{c:m.het,n:m.hn}}
+    var f1=norm(A,B);
+    var h='<div class="row" style="gap:18px;margin-bottom:14px"><div style="text-align:center">'+flower(RED,46)+'<div class="lat" style="font-size:14px"><b>'+A+A+'</b></div></div><b>×</b><div style="text-align:center">'+flower(WH,46)+'<div class="lat" style="font-size:14px"><b>'+B+B+'</b></div></div>'+
+      '<b>←</b><div style="text-align:center">'+flower(m.het,46)+'<div style="font-size:13px"><span class="lat"><b>'+f1+'</b></span><br>كل الجيل الأول: '+m.hn+'</div></div></div>';
+    h+='<p class="hint">الجيل الثاني (تلقيح ذاتي للجيل الأول):</p>'+punTable([A,B],[A,B],function(ri,ci){var g=norm([A,B][ci],[A,B][ri]),p=ph(g);return '<b class="lat">'+g+'</b>'+flower(p.c,32)+'<div>'+p.n+'</div>'});
+    h+='<p class="ratio">النسبة المظهرية في الجيل الثاني: '+m.f2+'</p><div class="info"><p>'+m.ht+(m.ex?' '+m.ex:'')+'</p></div>';
+    $('#dmOut').innerHTML=h;
+  }
+  chips($('#dmTog'),['complete','incomplete','co'].map(function(k){return {k:k,l:M[k].l}}),draw);
+})();
+
+/* ---------- pedigree ---------- */
+(function(){
+  var P=[
+    {id:'I1',x:200,y:60,sq:true,aff:false,n:'الأب (I-1)',d:'سليم الظاهر، وله ابنة مصابة. إذن لا بد أنه يحمل أليلًا متنحيًا، وتركيبه Aa (حامل للصفة).'},
+    {id:'I2',x:340,y:60,sq:false,aff:false,n:'الأم (I-2)',d:'سليمة الظاهر، ولها ابنة مصابة. إذن تركيبها Aa (حاملة للصفة).'},
+    {id:'II1',x:130,y:220,sq:false,aff:true,n:'الابنة (II-1)',d:'مصابة بالمهاق. وبما أن الصفة متنحية فلا تظهر إلا إذا اجتمع الأليلان المتنحيان، فتركيبها aa.'},
+    {id:'II2',x:270,y:220,sq:true,aff:false,n:'الابن (II-2)',d:'سليم الظاهر. من الأبوين Aa × Aa يكون تركيبه AA أو Aa. بين الأبناء السليمين احتمال أن يكون حاملًا للصفة 2 من 3.'},
+    {id:'II3',x:410,y:220,sq:false,aff:false,n:'الابنة (II-3)',d:'سليمة الظاهر. تركيبها AA أو Aa، واحتمال أن تكون حاملة للصفة 2 من 3.'}
+  ];
+  var s='<path d="M222 60H318M270 60V140M130 140H410M130 140V198M270 140V198M410 140V198" stroke="var(--ink)" stroke-width="2" fill="none"/>';
+  P.forEach(function(p){
+    var f=p.aff?'var(--c)':'var(--surface)';
+    s+='<g data-id="'+p.id+'" style="cursor:pointer" tabindex="0" role="button" aria-label="'+p.n+'">'+(p.sq?'<rect x="'+(p.x-22)+'" y="'+(p.y-22)+'" width="44" height="44" rx="3"':'<circle cx="'+p.x+'" cy="'+p.y+'" r="22"')+' style="fill:'+f+'" stroke="var(--ink)" stroke-width="2.5"/><text x="'+p.x+'" y="'+(p.y+46)+'" text-anchor="middle" class="svt s">'+p.id.replace(/([IV]+)(\d)/,'$1-$2')+'</text></g>';
+  });
+  $('#pedSvg').innerHTML=s;
+  function pick(id){var p=P.filter(function(q){return q.id===id})[0];$('#pedInfo').innerHTML='<h4>'+p.n+'</h4><p>'+p.d+'</p>';$$('#pedSvg g').forEach(function(g){g.style.opacity=g.dataset.id===id?1:0.45})}
+  $$('#pedSvg g').forEach(function(g){g.addEventListener('click',function(){pick(g.dataset.id)});g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(g.dataset.id)}})});
+})();
+
+/* ---------- linkage chart ---------- */
+(function(){
+  var D=[['بنفسجي، طويل',216,284],['بنفسجي، مستدير',71,21],['أحمر، طويل',71,21],['أحمر، مستدير',24,55]];
+  var X0=50,Y0=20,Y1=250,sc=(Y1-Y0)/300;
+  var s='';
+  [0,100,200,300].forEach(function(v){var y=Y1-v*sc;s+='<line x1="'+X0+'" y1="'+y+'" x2="620" y2="'+y+'" stroke="var(--line)"/><text x="'+(X0-8)+'" y="'+(y+4)+'" text-anchor="end" class="svt s">'+v+'</text>'});
+  D.forEach(function(d,i){
+    var gx=X0+30+i*138;
+    [[d[1],'var(--muted)'],[d[2],'var(--c)']].forEach(function(b,j){var x=gx+j*46,h=b[0]*sc;
+      s+='<rect x="'+x+'" y="'+(Y1-h)+'" width="40" height="'+h+'" rx="3" style="fill:'+b[1]+'"/><text x="'+(x+20)+'" y="'+(Y1-h-6)+'" text-anchor="middle" class="svt" style="font-weight:600">'+b[0]+'</text>'});
+    s+='<text x="'+(gx+43)+'" y="'+(Y1+20)+'" text-anchor="middle" class="svt s">'+d[0]+'</text>';
+  });
+  s+='<rect x="440" y="2" width="12" height="12" style="fill:var(--muted)"/><text x="458" y="12" class="svt s">المتوقع (9:3:3:1)</text><rect x="548" y="2" width="12" height="12" style="fill:var(--c)"/><text x="566" y="12" class="svt s">الفعلي</text>';
+  $('#lkChart').innerHTML='<svg viewBox="0 0 640 285" role="img" aria-label="مقارنة الأعداد المتوقعة والفعلية">'+s+'</svg>';
+})();
+
+/* ---------- crossing over ---------- */
+(function(){
+  var after=false;
+  var L=['A','B','C','D','E'];
+  function chrom(x,cols,lets){
+    var h='';for(var i=0;i<5;i++){h+='<rect x="'+x+'" y="'+(30+i*38)+'" width="30" height="34" rx="5" style="fill:'+cols[i]+'" stroke="color-mix(in srgb,var(--ink) 40%,transparent)"/><text x="'+(x+15)+'" y="'+(52+i*38)+'" text-anchor="middle" class="svt lat" style="font-weight:600;fill:#12241a">'+lets[i]+'</text>'}
+    return h;
+  }
+  var PK='#e98ab0',YL='#e8c647';
+  function draw(){
+    var up=function(a){return a.map(function(x){return x.toUpperCase()})},lo=function(a){return a.map(function(x){return x.toLowerCase()})};
+    var cp=[PK,PK,PK,PK,PK],cy=[YL,YL,YL,YL,YL];
+    var s='<text x="75" y="18" text-anchor="middle" class="svt s">كروموسوم 1</text><text x="310" y="18" text-anchor="middle" class="svt s">كروموسوم 2</text>';
+    s+=chrom(50,cp,up(L))+chrom(86,cp,up(L));
+    if(!after){s+=chrom(250,cy,lo(L))+chrom(286,cy,lo(L));}
+    else{
+      var mixP=[PK,PK,YL,YL,YL],mixY=[YL,YL,PK,PK,PK];
+      s+='';
+    }
+    if(after){
+      s='<text x="102" y="18" text-anchor="middle" class="svt s">كروموسوم 1</text><text x="310" y="18" text-anchor="middle" class="svt s">كروموسوم 2</text>'+
+        chrom(50,cp,up(L))+chrom(120,[PK,PK,YL,YL,YL],['A','B','c','d','e'])+chrom(250,[YL,YL,PK,PK,PK],['a','b','C','D','E'])+chrom(320,cy,lo(L));
+    }
+    else{
+      s='<text x="68" y="18" text-anchor="middle" class="svt s">كروموسوم 1</text><text x="300" y="18" text-anchor="middle" class="svt s">كروموسوم 2</text>'+
+        chrom(52,cp,up(L))+chrom(84,cp,up(L))+chrom(284,cy,lo(L))+chrom(316,cy,lo(L));
+      s+='<path d="M114 125L284 125" stroke="var(--c)" stroke-width="2" stroke-dasharray="5 4"/><text x="199" y="116" text-anchor="middle" class="svt s">كيازما</text>';
+    }
+    $('#coSvg').innerHTML=s;
+    $('#coInfo').innerHTML=after?'<p>تبادلت الكروماتيدتان الداخليتان أجزاءً بعد الكيازما. ظهر ارتباط جديد بين الجينات: <span class="lat"><b>A B c d e</b></span> و <span class="lat"><b>a b C D E</b></span>.</p>':'<p>كروموسومان متماثلان، ولكل منهما كروماتيدتان. قبل العبور لا يوجد خلط بين الجينات.</p>';
+    $('#coBtn').textContent=after?'العودة إلى ما قبل العبور':'حدوث العبور';
+  }
+  $('#coBtn').addEventListener('click',function(){after=!after;draw()});draw();
+})();
+
+/* ---------- sex determination ---------- */
+(function(){
+  $('#sxOut').innerHTML=punTable(['X','Y'],['X','X'],function(ri,ci){var f=ci===0;return '<b class="lat">'+(f?'XX':'XY')+'</b>'+(f?'أنثى':'ذكر')});
+  $('#sxOut').insertAdjacentHTML('afterbegin','<p class="hint" style="text-align:center">الأب: XY (أعلى) · الأم: XX (يمين)</p>');
+  $('#sxBtn').addEventListener('click',function(){
+    var f=0,m=0,h='';for(var i=0;i<20;i++){if(Math.random()<0.5){f++;h+='<span class="bd f"></span>'}else{m++;h+='<span class="bd m"></span>'}}
+    $('#sxKids').innerHTML=h;$('#sxTxt').textContent='إناث '+f+' · ذكور '+m+'. الاحتمال في كل ولادة 50%.';
+  });
+})();
+
+/* ---------- sex-linked ---------- */
+(function(){
+  function X(a){return 'X<sup>'+a+'</sup>'}
+  var C={
+    f1:{l:'ذبابة الفاكهة: الآباء',p1:['R','R'],p1n:'أنثى حمراء العينين',p2:['r','Y'],p2n:'ذكر أبيض العينين',
+        why:'أنثى XRXR × ذكر XrY: جميع الأبناء حمر العيون.'},
+    f2:{l:'ذبابة الفاكهة: الجيل الأول',p1:['R','r'],p1n:'أنثى حمراء العينين (هجينة)',p2:['R','Y'],p2n:'ذكر أحمر العينين',
+        why:'تظهر العيون البيضاء في الذكور فقط، بنسبة 3 حمر : 1 أبيض. وقد فاجأ هذا مورجان، لأن الجين محمول على الكروموسوم X.'},
+    cb:{l:'عمى الألوان',p1:['C','c'],p1n:'أم سليمة حاملة',p2:['C','Y'],p2n:'أب سليم',
+        why:'الأم الحاملة تنقل الأليل المتنحي لنصف أبنائها. يصاب الذكر لأن لديه كروموسوم X واحدًا فقط، ولذلك يكثر عمى الألوان بين الذكور.'}
+  };
+  function al(a,k){return a==='Y'?'Y':X(a)}
+  function draw(k){
+    var c=C[k],mom=c.p1,dad=c.p2;
+    var res={};
+    var h=punTable(mom.map(function(a){return X(a)}),dad.map(function(a){return al(a,k)}),function(ri,ci){
+      var a=mom[ci],b=dad[ri],male=b==='Y';
+      var txt,aff;
+      if(k==='cb'){aff=male&&a==='c';txt=male?(aff?'ذكر مصاب':'ذكر سليم'):(a==='c'?'أنثى حاملة':'أنثى سليمة')}
+      else{aff=male?a==='r':(a==='r'&&b==='r');txt=(male?'ذكر ':'أنثى ')+(aff?'أبيض العينين':'أحمر العينين')}
+      res[txt]=(res[txt]||0)+1;
+      return '<b>'+(male?X(a)+'Y':X(a)+X(b))+'</b><span class="'+(aff?'dm':'rc')+'"></span>'+txt;
+    });
+    var r=Object.keys(res).map(function(t){return res[t]+' '+t}).join(' · ');
+    $('#slOut').innerHTML='<p class="hint">الأم: '+c.p1n+' · الأب: '+c.p2n+'</p>'+h+'<p class="ratio">'+r+'</p><div class="info"><p>'+c.why+'</p></div>';
+  }
+  chips($('#slTog'),['f1','f2','cb'].map(function(k){return {k:k,l:C[k].l}}),draw);
+})();
+
+/* ---------- quizzes ---------- */
+var QUIZ={
+  plants:[
+    {q:'أي طبقة تقع أسفل البشرة العليا مباشرة، وخلاياها مستطيلة متراصة غنية بالبلاستيدات الخضراء؟',o:['الكيوتيكل','النسيج العمادي','النسيج الإسفنجي','البشرة السفلى'],a:1,w:'النسيج العمادي هو الذي يمتص معظم الضوء الواقع على الورقة.'},
+    {q:'ما وظيفة الثغور في الورقة؟',o:['تخزين الماء','تثبيت الورقة بالساق','تبادل الغازات وخروج بخار الماء','نقل السكريات'],a:2,w:'يتبادل الأكسجين وثاني أكسيد الكربون عبر الثغور، ويخرج منها بخار الماء.'},
+    {q:'عندما يدخل الماء إلى الخليتين الحارستين فإنهما تنتفخان وتؤدي ذلك إلى:',o:['إغلاق الثغر','فتح الثغر','تمزق الورقة','توقف النتح'],a:1,w:'يدفع الانتفاخ الجدار الرقيق للخارج، فتبتعد الخليتان عن بعضهما وينفتح الثغر.'},
+    {q:'نبات عروق أوراقه متوازية عادة، فهو على الأرجح:',o:['ثنائي الفلقة','أحادي الفلقة','صنوبري','طحلبي'],a:1,w:'عروق ذوات الفلقة الواحدة متوازية عادة، وعروق ذوات الفلقتين شبكية متفرعة.'},
+    {q:'أي نوع من الجذور يثبّت النبات بقوة ويحمل جذورًا جانبية كثيرة؟',o:['الليفي','الوتدي','الهوائي','الورقي'],a:1,w:'الجذر الوتدي مركزي كبير الحجم، وينمو عميقًا في التربة.'},
+    {q:'أي نسيج ينقل السكريات من الأوراق إلى بقية أجزاء النبتة؟',o:['الخشب','اللحاء','البشرة','النخاع'],a:1,w:'ينقل الخشب الماء والأملاح المعدنية، وينقل اللحاء السكريات.'},
+    {q:'تسمى عملية انتقال حبوب اللقاح من الأجزاء المذكرة إلى المؤنثة في الزهرة:',o:['الإخصاب','الإنبات','التلقيح','التنفس'],a:2,w:'التلقيح هو الانتقال، ويتبعه الإخصاب الذي يلتقي فيه المشيجان.'}
+  ],
+  photo:[
+    {q:'ما الناتج الثانوي لعملية البناء الضوئي؟',o:['ثاني أكسيد الكربون','الأكسجين','النيتروجين','الماء'],a:1,w:'يُنتج الأكسجين نتيجة شطر جزيئات الماء في التفاعلات الضوئية.'},
+    {q:'أين تحدث دورة كالفن؟',o:['في الستروما','على أغشية الثايلاكويد','في النواة','في الميتوكوندريا'],a:0,w:'تحدث دورة كالفن في الستروما (الحشوة)، وتحدث التفاعلات الضوئية في الثايلاكويد.'},
+    {q:'أي لون من الضوء لا يمتصه الكلوروفيل جيدًا فتعكسه الأوراق؟',o:['الأحمر','الأزرق','الأخضر','البنفسجي'],a:2,w:'لذلك تبدو معظم النباتات خضراء اللون.'},
+    {q:'أي مركّبين تنتجهما التفاعلات الضوئية وتستخدمهما دورة كالفن؟',o:['ATP وNADPH','CO₂ وH₂O','الجلوكوز والنشا','O₂ وH₂'],a:0,w:'تستخدم الدورة طاقتهما لتثبيت CO₂ وتكوين السكر.'},
+    {q:'في تجربة فان هلمونت نقص وزن التربة قليلًا جدًا بينما زاد وزن الشجرة كثيرًا. ماذا أهمل في استنتاجه؟',o:['ضوء الشمس','أثر ثاني أكسيد الكربون من الهواء','نوع التربة','عمق البرميل'],a:1,w:'ساهم غاز في الهواء، هو ثاني أكسيد الكربون، في زيادة وزن النبتة.'},
+    {q:'ماذا تعني نقطة التعويض؟',o:['أقصى كمية ضوء تتحملها النبتة','كمية الضوء اللازمة لبقاء النبات حيًا، حيث يتوازن السكر المنتَج والمستهلَك','أعلى درجة حرارة للنبات','كمية الماء اللازمة للإنبات'],a:1,w:'إذا قل الضوء عنها فترة طويلة فقدت النبتة طاقة.'},
+    {q:'أين يحدث شطر جزيئات الماء؟',o:['في دورة كالفن','في التفاعلات الضوئية على أغشية الثايلاكويد','في الجذور','في البشرة'],a:1,w:'يتحرر منه أكسجين وأيونات هيدروجين وإلكترونات.'}
+  ],
+  gen:[
+    {q:'ما النسبة التقريبية بين النباتات الطويلة والقصيرة في الجيل الثاني (F2) في تجربة مندل؟',o:['1 : 1','3 : 1','9 : 3','1 : 2 : 1'],a:1,w:'ظهرت الصفة المتنحية في نحو 25% من نباتات الجيل الثاني.'},
+    {q:'الصفة التي تظهر في أفراد الجيل الأول وتحملها أحد الأبوين تسمى:',o:['المتنحية','المرتبطة','السائدة','المتأثرة بالجنس'],a:2,w:'والصفة التي لا تظهر في الجيل الأول وتعود في الثاني هي المتنحية.'},
+    {q:'عند تزاوج نباتين هجينين Yy × Yy، ما احتمال ظهور بذرة خضراء (yy)؟',o:['0%','25%','50%','75%'],a:1,w:'النسبة الجينية 1 YY : 2 Yy : 1 yy.'},
+    {q:'ينص قانون الانعزال على أن:',o:['الجينات تنتقل دائمًا معًا','ينفصل كل زوج من الجينات عن بعضهما أثناء الانقسام الميوزي','الأليل المتنحي يسود دائمًا','كل الصفات مرتبطة بالجنس'],a:1,w:'لذلك يحتوي نصف الأمشاج على جين واحد من كل زوج.'},
+    {q:'ما النسبة المظهرية المتوقعة في الجيل الثاني للتلقيح الثنائي (RrYy × RrYy)؟',o:['3 : 1','1 : 2 : 1','9 : 3 : 3 : 1','1 : 1 : 1 : 1'],a:2,w:'وهذا بحسب قانون التوزيع المستقل.'},
+    {q:'تزاوج نبات أحمر الأزهار RR مع نبات أبيض WW فنتج جيل أول وردي RW. هذا مثال على:',o:['السيادة التامة','السيادة غير التامة','الارتباط','العبور'],a:1,w:'لا يسود أي أليل على الآخر، ويظهر مظهر وسط.'},
+    {q:'لمعرفة هل نبتة بذورها صفراء YY أم Yy، نلقحها مع نبتة تركيبها:',o:['YY','Yy','yy','Yy فقط من الجيل الثاني'],a:2,w:'إذا ظهر أبناء خضر فالنبتة هجينة Yy، وإن كانوا كلهم صفرًا فهي نقية YY.'},
+    {q:'الجينات الواقعة على الكروموسوم نفسه تنتقل معًا في الغالب. ويسمى هذا:',o:['الانعزال','السيادة','الارتباط','التلقيح الاختباري'],a:2,w:'وقد يتغير الارتباط بالعبور بين الكروماتيدات الداخلية.'},
+    {q:'أبوان سليمان لهما ابنة مصابة بصفة وراثية. ماذا نستنتج؟',o:['الصفة سائدة','الصفة متنحية','الصفة غير وراثية','الصفة مرتبطة بالجنس بالضرورة'],a:1,w:'لو كانت سائدة لظهرت على أحد الأبوين على الأقل.'}
+  ]
+};
+var S={ans:{}};
+try{var sv=localStorage.getItem('bio-ans-v1');if(sv)S.ans=JSON.parse(sv)||{}}catch(e){}
+function save(){try{localStorage.setItem('bio-ans-v1',JSON.stringify(S.ans))}catch(e){}}
+function correctCount(key){return QUIZ[key].filter(function(q,i){return S.ans[key+'-'+i]===q.a}).length}
+function updateProgress(){
+  var tot=0,ok=0;Object.keys(QUIZ).forEach(function(k){tot+=QUIZ[k].length;ok+=correctCount(k)});
+  $('#progT').textContent=ok+' من '+tot;$('#progBar').style.width=(tot?ok/tot*100:0)+'%';
+  var names={plants:'تركيب النباتات',photo:'التغذية في النباتات',gen:'علم الوراثة'};
+  $('#sum').innerHTML=Object.keys(QUIZ).map(function(k){var c=correctCount(k),t=QUIZ[k].length;return '<div class="sumrow"><span>'+names[k]+'</span><span class="sumbar"><i style="width:'+(c/t*100)+'%"></i></span><b>'+c+' / '+t+'</b></div>'}).join('');
+}
+function renderQuiz(key,mount){
+  var qs=QUIZ[key];
+  mount.innerHTML=qs.map(function(it,i){return '<div class="q" data-i="'+i+'"><p class="qt">'+(i+1)+'. '+it.q+'</p><div class="opts">'+it.o.map(function(o,j){return '<button class="opt" data-j="'+j+'">'+o+'</button>'}).join('')+'</div><p class="why" hidden></p></div>'}).join('')+'<div class="qfoot"><span class="qscore"></span><button class="btn alt rs">إعادة الاختبار</button></div>';
+  function paint(){
+    $$('.q',mount).forEach(function(q){
+      var i=+q.dataset.i,a=S.ans[key+'-'+i],it=qs[i],w=$('.why',q);
+      $$('.opt',q).forEach(function(b){
+        var j=+b.dataset.j;b.classList.remove('ok','no');b.disabled=a!==undefined;
+        if(a!==undefined){if(j===it.a)b.classList.add('ok');else if(j===a)b.classList.add('no')}
+      });
+      if(a!==undefined){w.hidden=false;w.textContent=(a===it.a?'إجابة صحيحة. ':'الإجابة الصحيحة موضحة بالأخضر. ')+it.w}else w.hidden=true;
+    });
+    var done=qs.filter(function(q,i){return S.ans[key+'-'+i]!==undefined}).length;
+    $('.qscore',mount).textContent='أجبت عن '+done+' من '+qs.length+' · الصحيحة: '+correctCount(key);
+    updateProgress();
+  }
+  $$('.opt',mount).forEach(function(b){b.addEventListener('click',function(){var i=+b.closest('.q').dataset.i;S.ans[key+'-'+i]=+b.dataset.j;save();paint()})});
+  $('.rs',mount).addEventListener('click',function(){qs.forEach(function(q,i){delete S.ans[key+'-'+i]});save();paint()});
+  paint();
+}
+renderQuiz('plants',$('#quizPlants'));renderQuiz('photo',$('#quizPhoto'));renderQuiz('gen',$('#quizGen'));
+$('#resetAll').addEventListener('click',function(){S.ans={};save();renderQuiz('plants',$('#quizPlants'));renderQuiz('photo',$('#quizPhoto'));renderQuiz('gen',$('#quizGen'))});
+
+/* ---------- flashcards ---------- */
+var FC=[
+  ['النصل','تركيب نباتي','الجزء المفلطح العريض من الورقة، ويحتوي على الخلايا التي تقوم بالبناء الضوئي.'],
+  ['الثغور','تركيب نباتي','فتحات صغيرة في بشرة الورقة تسمح بخروج بخار الماء وبتبادل الأكسجين وثاني أكسيد الكربون مع الهواء.'],
+  ['الخلايا الحارسة','تركيب نباتي','خليتان تحيطان بالثغر، تتحكمان في فتحه وإغلاقه بحسب ضغط الماء داخلهما.'],
+  ['العقدة','تركيب نباتي','موضع اتصال الأوراق بالساق. والقطعة بين عقدتين متجاورتين تسمى عقلة.'],
+  ['البناء الضوئي','تغذية','عملية تستخدم فيها الكائنات ذاتية التغذية طاقة ضوء الشمس لبناء السكريات من ثاني أكسيد الكربون والماء.'],
+  ['الكلوروفيل','تغذية','الصبغة الأساسية للبناء الضوئي في جميع النباتات، وتمتص الضوء الأزرق والأحمر وتعكس الأخضر.'],
+  ['دورة كالفن','تغذية','المرحلة الثانية من البناء الضوئي، تحدث في الستروما ولا تعتمد مباشرة على الضوء.'],
+  ['نقطة التعويض','تغذية','كمية الطاقة الضوئية اللازمة لبقاء النبات على قيد الحياة، حيث يتوازن السكر المنتَج والمستهلَك.'],
+  ['الصفة السائدة','وراثة','الصفة التي تظهر في أفراد الجيل الأول وتحملها أحد الأبوين.'],
+  ['الصفة المتنحية','وراثة','الصفة التي لا تظهر في الجيل الأول وتظهر في بعض أفراد الجيل الثاني.'],
+  ['التركيب الجيني','وراثة','الأليلات التي يحملها الفرد لصفة معينة، مثل Yy.'],
+  ['التلقيح الاختباري','وراثة','تلقيح فرد سائد غير معروف التركيب الجيني مع فرد متنحٍ نقي، لتحديد إن كان نقيًا أم هجينًا.'],
+  ['السيادة غير التامة','وراثة','لا يسود أي أليل على الآخر، فيظهر في الهجين مظهر وسط بين الأبوين.'],
+  ['الارتباط','وراثة','انتقال الجينات الواقعة على الكروموسوم نفسه معًا.'],
+  ['العبور','وراثة','تبادل أجزاء بين الكروماتيدات الداخلية المتجاورة في الطور التمهيدي الأول، فتنشأ ارتباطات جينية جديدة.'],
+  ['الصفات المرتبطة بالجنس','وراثة','صفات تحملها جينات واقعة على الكروموسوم X أو Y، مثل عمى الألوان.']
+];
+$('#fc').innerHTML=FC.map(function(c){return '<button class="fcard" aria-pressed="false"><b>'+c[0]+'</b><small>'+c[1]+'</small><span hidden>'+c[2]+'</span></button>'}).join('');
+$$('.fcard').forEach(function(b){b.addEventListener('click',function(){var on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));$('span',b).hidden=!on;$('small',b).hidden=on})});
+/* ---------- book pagination ---------- */
+(function(){
+  var app=$('#app');
+  function ID(i){return document.getElementById(i)}
+  function kids(el){return Array.prototype.slice.call(el.children)}
+  function H(t){var h=document.createElement('h2');h.className='pgh';h.textContent=t;return h}
+  var defs=[];
+  function add(t,chap,cls,nodes,op){defs.push({t:t,chap:chap,cls:cls,nodes:nodes,op:op})}
+  var NB='رحلة الأحياء';
+  add('الغلاف',NB,'ch-plants cover',[ID('top')]);
+  var pl=ID('plants'),tg=$('.tabgroup',pl);
+  $('.tablist',tg).remove();
+  var pk=kids($('.in',pl));
+  function pan(k){var p=$('[data-p="'+k+'"]',tg);p.hidden=false;return kids(p)}
+  var le=pan('leaves'),st=pan('stems'),ro=pan('roots'),fl=pan('flowers');
+  var N1='تركيب النباتات',C1='ch-plants';
+  add('افتتاحية الفصل',N1,C1,[pk[0]],1);
+  add('الأوراق',N1,C1,[H('الأوراق'),le[0],le[1]]);
+  add('داخل الورقة',N1,C1,[le[2]]);
+  add('الثغور وتكيفات الأوراق',N1,C1,[le[3],le[4]]);
+  add('السوق',N1,C1,[H('السوق'),st[0],st[1]]);
+  add('مقطع الساق والسوق المتحورة',N1,C1,[st[2],st[3]]);
+  add('الجذور',N1,C1,[H('الجذور'),ro[0],ro[1]]);
+  add('تركيب الجذر',N1,C1,[ro[2]]);
+  add('الأزهار والبذور والثمار',N1,C1,[H('الأزهار والبذور والثمار'),fl[0],fl[1]]);
+  add('اختبر نفسك',N1,C1,[pk[2]]);
+  var ph=kids($('.in',ID('photo'))),N2='التغذية في النباتات',C2='ch-photo';
+  add('افتتاحية الفصل',N2,C2,[ph[0]],1);
+  add('ماذا يحتاج البناء الضوئي؟',N2,C2,[ph[1]]);
+  add('البلاستيدة الخضراء',N2,C2,[ph[2]]);
+  add('مرحلتا البناء الضوئي',N2,C2,[ph[3]]);
+  add('لماذا الأوراق خضراء؟',N2,C2,[ph[4]]);
+  add('العوامل المؤثرة',N2,C2,[ph[5]]);
+  add('تجربة فان هلمونت',N2,C2,[ph[6]]);
+  add('سنبيير والبناء الكيميائي',N2,C2,[ph[7]]);
+  add('اختبر نفسك',N2,C2,[ph[8]]);
+  var ge=kids($('.in',ID('genetics'))),N3='علم الوراثة',C3='ch-gen';
+  add('افتتاحية الفصل',N3,C3,[ge[0]],1);
+  add('تجارب مندل',N3,C3,[ge[1]]);
+  add('قوانين مندل',N3,C3,[ge[2]]);
+  add('مختبر مربع بانت',N3,C3,[ge[3]]);
+  add('التلقيح الاختباري',N3,C3,[ge[4]]);
+  add('أنماط السيادة',N3,C3,[ge[5],ge[6]]);
+  add('سجل النسب',N3,C3,[ge[7]]);
+  add('الارتباط والعبور',N3,C3,[ge[8]]);
+  add('الوراثة والجنس',N3,C3,[ge[9]]);
+  add('اختبر نفسك',N3,C3,[ge[10]]);
+  var rv=kids($('.in',ID('review'))),N4='مراجعة';
+  add('بطاقات المصطلحات',N4,C1,[rv[0],rv[1]]);
+  add('ملخص التقدم',N4,C1,[rv[2]]);
+
+  var book=document.createElement('main');book.className='book';book.id='book';
+  var first={};
+  var pages=defs.map(function(d,i){
+    if(first[d.chap]===undefined)first[d.chap]=i;
+    var pg=document.createElement('section');pg.className='page '+d.cls+(d.op?' opener':'');pg.hidden=true;pg.setAttribute('aria-label',d.t);
+    var inn=document.createElement('div');inn.className='pgin';
+    d.nodes.forEach(function(n){inn.appendChild(n)});
+    pg.appendChild(inn);
+    var f=document.createElement('div');f.className='pgfoot';f.innerHTML='<span>'+d.chap+(i?' · '+d.t:'')+'</span><b>'+(i+1)+'</b>';
+    pg.appendChild(f);book.appendChild(pg);return pg;
+  });
+  app.insertBefore(book,$('footer'));
+  ['plants','photo','genetics','review'].forEach(function(i){var e=ID(i);if(e&&e.parentNode)e.parentNode.removeChild(e)});
+  $('.hero .paths').insertAdjacentHTML('afterend','<p class="note">قلّب الصفحات بالأزرار في الأسفل، أو اسحب الصفحة بإصبعك من اليسار إلى اليمين للصفحة التالية، أو استخدم أسهم لوحة المفاتيح.</p>');
+
+  var bar=document.createElement('div');bar.className='bar';
+  bar.innerHTML='<div class="barp"><i id="bpf"></i></div><div class="barin"><button class="bb" id="bPrev">→ السابقة</button><button class="bmid" id="bToc" aria-haspopup="dialog"><span id="bTit"></span><b id="bNum"></b></button><button class="bb" id="bNext">التالية ←</button></div>';
+  app.appendChild(bar);
+  var toc=document.createElement('div');toc.className='toc';toc.hidden=true;toc.setAttribute('role','dialog');toc.setAttribute('aria-label','فهرس الكتاب');
+  var h='<div class="tocin"><div class="toch"><h3>فهرس الكتاب</h3><button class="btn alt" id="tocX">إغلاق</button></div>',last='';
+  defs.forEach(function(d,i){if(d.chap!==last){last=d.chap;h+='<h4>'+d.chap+'</h4>'}h+='<button class="tocl" data-i="'+i+'"><span>'+d.t+'</span><b>'+(i+1)+'</b></button>'});
+  toc.innerHTML=h+'</div>';app.appendChild(toc);
+
+  var cur=-1,total=pages.length,tl=$$('.tocl',toc);
+  function go(i,noAnim){
+    i=Math.max(0,Math.min(total-1,i));if(i===cur)return;
+    var dir=i>cur?1:-1,old=pages[cur],nw=pages[i];
+    if(old)old.hidden=true;
+    nw.hidden=false;nw.classList.remove('fn','fp');
+    if(!noAnim&&cur>=0){void nw.offsetWidth;nw.classList.add(dir>0?'fn':'fp')}
+    cur=i;
+    $('#bNum').textContent=(i+1)+' من '+total;$('#bTit').textContent=defs[i].t;
+    $('#bPrev').disabled=i===0;$('#bNext').disabled=i===total-1;
+    $('#bpf').style.width=((i+1)/total*100)+'%';
+    $('#bpf').style.background=getComputedStyle(nw).getPropertyValue('--c');
+    $('.bar').style.setProperty('--c',getComputedStyle(nw).getPropertyValue('--c'));
+    $('.bar').style.setProperty('--on-c',getComputedStyle(nw).getPropertyValue('--on-c'));
+    tl.forEach(function(b){b.setAttribute('aria-current',String(+b.dataset.i===i))});
+    window.scrollTo({top:0,behavior:'auto'});
+    try{localStorage.setItem('bio-page-v1',String(i))}catch(e){}
+  }
+  function closeToc(){toc.hidden=true}
+  $('#bPrev').addEventListener('click',function(){go(cur-1)});
+  $('#bNext').addEventListener('click',function(){go(cur+1)});
+  $('#bToc').addEventListener('click',function(){toc.hidden=false});
+  $('#tocX').addEventListener('click',closeToc);
+  toc.addEventListener('click',function(e){if(e.target===toc)closeToc()});
+  tl.forEach(function(b){b.addEventListener('click',function(){go(+b.dataset.i);closeToc()})});
+  var map={'#top':0,'#plants':first[N1],'#photo':first[N2],'#genetics':first[N3],'#review':first[N4]};
+  $$('a[href^="#"]').forEach(function(a){var k=a.getAttribute('href');if(map[k]!==undefined)a.addEventListener('click',function(e){e.preventDefault();go(map[k])})});
+  var tx=0,ty=0,ok=false;
+  book.addEventListener('touchstart',function(e){var t=e.touches[0];tx=t.clientX;ty=t.clientY;ok=!e.target.closest('input,select,textarea,.tbl,.eq')},{passive:true});
+  book.addEventListener('touchend',function(e){if(!ok)return;var t=e.changedTouches[0],dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.6)go(cur+(dx>0?1:-1))},{passive:true});
+  document.addEventListener('keydown',function(e){
+    if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
+    if(e.key==='ArrowLeft')go(cur+1);else if(e.key==='ArrowRight')go(cur-1);else if(e.key==='Escape')closeToc();
+  });
+  var start=0;try{start=parseInt(localStorage.getItem('bio-page-v1'),10)||0}catch(e){}
+  go(start,true);
+})();
+
+
+})();
+</script>
+</div>
+
+</body>
+</html>
